@@ -79,7 +79,8 @@ struct Dashboard: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Image(systemName: "\(date.day).square").font(.headline)
                     Text("Today").font(.caption)
-                }
+
+                }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 Text(String(user.completions.filterBy(date: date).count))
                     .multilineTextAlignment(.trailing)
                     .font(.headline)
@@ -87,20 +88,21 @@ struct Dashboard: View {
             .modifier(DashboardPanel())
             
             HStack {
-                VStack {
+                VStack(alignment: .leading, spacing: 5) {
                     Image(systemName: "calendar").font(.headline)
                     Text("Week").font(.caption)
                     
-                }
+                }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 Text(String(user.completions.filterBy(weekOfYear: date.weekOfYear).count)).font(.title)
+                    .multilineTextAlignment(.trailing)
             }
             .modifier(DashboardPanel())
             
             HStack {
-                VStack {
-                    Image(systemName: "sterlingsign.square").font(.title)
+                VStack(alignment: .leading, spacing: 5) {
+                    Image(systemName: "sterlingsign.square").font(.headline)
                     Text("Week").font(.caption)
-                }
+                }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 Text(String(user.earnedForWeek(date: date).displayCurrency())).font(.subheadline).lineLimit(0)
             }.modifier(DashboardPanel())
         }

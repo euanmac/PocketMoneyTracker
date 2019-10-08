@@ -23,9 +23,7 @@ struct TestLayout: View {
     @EnvironmentObject var user: User
     @State var selectedDate = Date()
     @State var completed = false
-    let arr = Array([21,22,23,24,25,26,27])
-    let arr2 = Array(["M","T","W","T","F","S","S"])
-    
+
     var body: some View {
         ZStack {
             Color(UIColor.quaternarySystemFill).edgesIgnoringSafeArea(.all)
@@ -34,26 +32,25 @@ struct TestLayout: View {
                     Text("Loading")
                 }
             } else {
-                HStack(alignment: .center, spacing: 5) {
-                    Image(systemName: "arrowtriangle.left.circle.fill").font(.headline)
-                    
-                        HStack {
-                            ForEach(0...6 ,id: \.self) {i in
-                                VStack{
-                                    Text(String(self.arr[i]))
-                                    Text(self.arr2[i])
-                                }.frame(maxWidth: .infinity)
-                            }
+               
+                HStack {
+                    VStack(alignment: .leading, spacing: nil)  {
+                            Image(systemName: "calendar").font(.headline)
+                            Text("Week").font(.caption)
+                            
                         }
-                        .frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
-                    Image(systemName: "arrowtriangle.right.circle.fill").font(.headline)
-                }
-                .padding(10)
-                .background(Color.primary.colorInvert())
-                .cornerRadius(10)
-                .padding(.all)
-                .shadow(radius: 5)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        .background(Color.blue)
+                        Text(String(user.completions.filterBy(weekOfYear: Date().weekOfYear).count)).font(.title)
+                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                    }
+                    .modifier(DashboardPanel())
+                    
+                    
+                    
                 
+                    //ExtractedView()
+                    
                 
  //               NavigationView {
 //                VStack {
@@ -181,7 +178,7 @@ struct TestRow: View {
 }
 
 struct TestLayout_Previews: PreviewProvider {
-  
+
     static var previews: some View {
         let dm = DataManager()
         let user = User(dataManager: DataManager())
@@ -193,5 +190,32 @@ struct TestLayout_Previews: PreviewProvider {
                 TestLayout().environmentObject(user).environment(\.colorScheme, .light)
                 //TestLayout().environmentObject(user).environment(\.colorScheme, .dark)
         }
+    }
+}
+
+struct ExtractedView: View {
+    let arr = Array([21,22,23,24,25,26,27])
+    let arr2 = Array(["M","T","W","T","F","S","S"])
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 5) {
+            Image(systemName: "arrowtriangle.left.circle.fill").font(.headline)
+            
+            HStack {
+                ForEach(0...6 ,id: \.self) {i in
+                    VStack{
+                        Text(String(self.arr[i]))
+                        Text(self.arr2[i])
+                    }.frame(maxWidth: .infinity)
+                }
+            }
+            .frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
+            Image(systemName: "arrowtriangle.right.circle.fill").font(.headline)
+        }
+        .padding(10)
+        .background(Color.primary.colorInvert())
+        .cornerRadius(10)
+        .padding(.all)
+        .shadow(radius: 5)
     }
 }
