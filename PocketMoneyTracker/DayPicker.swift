@@ -16,35 +16,41 @@ struct DayPicker: View {
             VStack  {
                 HStack {
                     Text(self.selectedDate.full)
+                        .padding(5)
+                        .foregroundColor(Color.primary)
+                        .background(Color.primary.colorInvert())
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
                 }
                 
-                HStack(alignment: .center, spacing: 15) {
+                HStack(alignment: .center, spacing: 0) {
                     Image(systemName: "arrowtriangle.left.circle.fill")
                         .font(.title)
+                        .shadow(radius: 5)
                         .onTapGesture {
                             self.selectedDate = Calendar.current.date(byAdding: .day, value: -7, to: self.selectedDate)!
                     }
-                    Spacer()
-                    //GeometryReader {geometry in
+                    
+                    
                         ForEach(self.selectedDate.weekOfDates, id: \.self) { weekDate in
-                            HStack(alignment: .center, spacing: 30){
-                                //Spacer()
-                                VStack {
-                                    
-                                    Text(weekDate.dayInitial).font(.caption)
-                                    Text(weekDate.day)
-                                        .modifier(TextDay(selected: weekDate.dateEqual(to: self.selectedDate)))
-                                        .onTapGesture {
-                                            self.selectedDate = weekDate
-                                    }//.frame(width: geometry.size.width, height: geometry.size.width, alignment: .topLeading)
-                                   
-                                }
+                            
+                            VStack(alignment: .center, spacing:15) {
+                                
+                                Text(weekDate.dayInitial).font(.caption)
+                                Text(weekDate.day)
+                                    .modifier(TextDay(selected: weekDate.dateEqual(to: self.selectedDate)))
+                                    .onTapGesture {
+                                        self.selectedDate = weekDate
+                                }.frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
+                               
                             }
-                        }.layoutPriority(1)
-                    //}
-                    Spacer()
+                        }
+                        
+                    
+                    
                     Image(systemName: "arrowtriangle.right.circle.fill")
                         .font(.title)
+                        .shadow(radius: 5)
                         .onTapGesture {
                         self.selectedDate = Calendar.current.date(byAdding: .day, value: 7, to: self.selectedDate)!
                     }
@@ -83,6 +89,7 @@ struct TextDay: ViewModifier {
             .foregroundColor(Color.primary)
             .background(Color.primary.colorInvert())
             .cornerRadius(20)
+            .shadow(radius: 5)
 
         return selected ? AnyView(modified.colorInvert()) : AnyView(modified)
     }
@@ -90,8 +97,8 @@ struct TextDay: ViewModifier {
 
 struct DayPicker_Previews: PreviewProvider {
     static var previews: some View {
-        List {
+        //List {
             DayPicker(selectedDate: .constant(Date()))
-        }
+        //}
     }
 }

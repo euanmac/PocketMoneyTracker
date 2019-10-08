@@ -16,17 +16,17 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            Color.black
+            Color(UIColor.quaternarySystemFill).edgesIgnoringSafeArea(.all)
             if (user.userDetails == nil) {
                 HStack {
                     Text("Loading")
                 }
             } else {
 
-                NavigationView {
+                //NavigationView {
                     //GeometryReader { geometry in
                         
-                        VStack {
+                        //VStack {
                            
 //                            Text("Text1")
 //                                .frame(width: geometry.size.width, height: nil, alignment: .topLeading).background(Color.red)
@@ -42,23 +42,24 @@ struct ContentView: View {
 //                                .background(Color.gray).opacity(25)
 //                                .cornerRadius(10)
                             
-                            List() {
+                VStack(alignment: .center, spacing: 20) {
                                 
-                                VStack(alignment: .center, spacing: 0) {
-                                    DayPicker(selectedDate: self.$selectedDate)
-                                }
+                                DayPicker(selectedDate: self.$selectedDate)
+                                TestLayout()
                                 Dashboard(date: self.selectedDate)
-                                ForEach(self.user.userTasks) {task in
-                                    TaskRow(task: task, date: self.selectedDate)
-                                }
                                 
+                                VStack {
+                                    ForEach(self.user.userTasks) {task in
+                                        TaskRow(task: task, date: self.selectedDate)
+                                    }
+                                }
                             }
+                            .padding(.all)
                             .navigationBarTitle(Text(self.user.userDetails!.firstName))
-                        }
+                        //}
                     //}
-                }
-                //.frame(width: 22.0)
-                .background(Color.black)
+                //}
+
             }
         }
             //.frame(width: .infinity, height: .infinity, alignment: .center)
@@ -73,39 +74,50 @@ struct Dashboard: View {
     let date: Date
     
     var body: some View {
-        HStack {
+        HStack(alignment: .center, spacing: 5) {
             HStack {
-                VStack() {
-                    Image(systemName: "\(date.day).square").font(.title).font(.title)
+                VStack(alignment: .leading, spacing: 5) {
+                    Image(systemName: "\(date.day).square").font(.headline)
                     Text("Today").font(.caption)
-                    
                 }
-                Text(String(user.completions.filterBy(date: date).count)).font(.title)
+                Text(String(user.completions.filterBy(date: date).count))
+                    .multilineTextAlignment(.trailing)
+                    .font(.headline)
             }
+            .modifier(DashboardPanel())
             
             HStack {
                 VStack {
-                    Image(systemName: "calendar").font(.title)
+                    Image(systemName: "calendar").font(.headline)
                     Text("Week").font(.caption)
                     
                 }
                 Text(String(user.completions.filterBy(weekOfYear: date.weekOfYear).count)).font(.title)
             }
+            .modifier(DashboardPanel())
+            
             HStack {
                 VStack {
                     Image(systemName: "sterlingsign.square").font(.title)
                     Text("Week").font(.caption)
                 }
-                Text(String(user.earnedForWeek(date: date).displayCurrency())).font(.headline)
-            }
-            .foregroundColor(.white)
-            .padding(5)
-            .background(Color.gray).opacity(25)
-            .cornerRadius(10)
+                Text(String(user.earnedForWeek(date: date).displayCurrency())).font(.subheadline).lineLimit(0)
+            }.modifier(DashboardPanel())
         }
     }
 }
 
+struct DashboardPanel: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
+            .foregroundColor(.primary)
+            .padding(5)
+            .background(Color.primary.colorInvert())
+            .cornerRadius(10)
+            .shadow(radius: 5)
+    }
+}
 
 struct TaskRow: View {
     

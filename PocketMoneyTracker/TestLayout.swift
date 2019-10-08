@@ -23,54 +23,87 @@ struct TestLayout: View {
     @EnvironmentObject var user: User
     @State var selectedDate = Date()
     @State var completed = false
-    let arr = Array([11,12,13,14,15,16,17])
+    let arr = Array([21,22,23,24,25,26,27])
     let arr2 = Array(["M","T","W","T","F","S","S"])
     
     var body: some View {
         ZStack {
-            Color.black
+            Color(UIColor.quaternarySystemFill).edgesIgnoringSafeArea(.all)
             if (user.userDetails == nil) {
                 HStack {
                     Text("Loading")
                 }
             } else {
-
-                NavigationView {
+                HStack(alignment: .center, spacing: 5) {
+                    Image(systemName: "arrowtriangle.left.circle.fill").font(.headline)
                     
-                    HStack(alignment: .center, spacing: 20) {
-                        Image(systemName: "arrowtriangle.left.circle.fill")
-                        GeometryReader {geometry in
-                            HStack() {
-                                
-                                ForEach(0...6 ,id: \.self) {i in
-                                    VStack{
-                                        Text(String(self.arr[i]))
-                                        Text(self.arr2[i])
-                                    }.frame(width: (geometry.size.width / CGFloat(self.arr.count+1)), height: geometry.size.height)
-                                }
-                                
-                            }//.frame(width: geometry.size.width, height: nil, alignment: .top)
-                                
+                        HStack {
+                            ForEach(0...6 ,id: \.self) {i in
+                                VStack{
+                                    Text(String(self.arr[i]))
+                                    Text(self.arr2[i])
+                                }.frame(maxWidth: .infinity)
+                            }
                         }
-                        Image(systemName: "arrowtriangle.right.circle.fill")
-                    }
-                    //.frame(width: nil, height: nil, alignment: .top)
-                        .padding(.all)
-                    //GeometryReader { geometry in
-//                    HStack(alignment: .top, spacing: 10) {
+                        .frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
+                    Image(systemName: "arrowtriangle.right.circle.fill").font(.headline)
+                }
+                .padding(10)
+                .background(Color.primary.colorInvert())
+                .cornerRadius(10)
+                .padding(.all)
+                .shadow(radius: 5)
+                
+                
+ //               NavigationView {
+//                VStack {
+//                    HStack(alignment: .center, spacing: 20) {
 //
-////                            Text("Text1")
-////                                .frame(width: geometry.size.width, height: nil, alignment: .topLeading).background(Color.red)
+//                        Image(systemName: "arrowtriangle.left.circle.fill")
+//                        GeometryReader {geometry in
+//                            HStack() {
 //
-////                            Text("Text2")
-////                                .padding(5)
-////                                .background(Color.gray).opacity(25)
-////                                .cornerRadius(10)
-////                            Text("Text2")
-////                                .padding(5)
-////                                .background(Color.gray).opacity(25)
-////                                .cornerRadius(10)
+//                                ForEach(0...6 ,id: \.self) {i in
+//                                    VStack{
+//                                        Text(String(self.arr[i]))
+//                                        Text(self.arr2[i])
+//                                    }.frame(width: (geometry.size.width / CGFloat(self.arr.count+1)), height:50)
 //
+//                                }
+//
+//                            }//.frame(width: geometry.size.width, height: nil, alignment: .top)
+//
+//                        }
+//                        Image(systemName: "arrowtriangle.right.circle.fill")
+//
+//                    }
+//                        .background(Color.blue)
+//                        .padding(.all)
+//
+//
+//                HStack(alignment: .center, spacing: 20) {
+//
+//                    Image(systemName: "arrowtriangle.left.circle.fill")
+//                    GeometryReader {geometry in
+//                        HStack() {
+//
+//                            ForEach(0...6 ,id: \.self) {i in
+//                                VStack{
+//                                    Text(String(self.arr[i]))
+//                                    Text(self.arr2[i])
+//                                }.frame(width: (geometry.size.width / CGFloat(self.arr.count+1)), height:50)
+//
+//                            }
+//
+//                        }//.frame(width: geometry.size.width, height: nil, alignment: .top)
+//
+//                    }
+//                    Image(systemName: "arrowtriangle.right.circle.fill")
+//
+//                }
+//                    .background(Color.blue)
+//                    .padding(.all)
+//                }
 //                            VStack {
 //
 //                                DayPicker(selectedDate: self.$selectedDate)
@@ -84,7 +117,7 @@ struct TestLayout: View {
 //                            .navigationBarTitle(Text(self.user.userDetails!.firstName))
 //                        }
                         
-                    }
+//                    }
                 }
             }
         }
@@ -155,6 +188,10 @@ struct TestLayout_Previews: PreviewProvider {
         user.userDetails = dm.userDetails
         user.userTasks = dm.tasks
         user.userWeeks = dm.weeks
-        return TestLayout().environmentObject(user).previewDevice("iPhone SE")
+        return
+            Group {
+                TestLayout().environmentObject(user).environment(\.colorScheme, .light)
+                //TestLayout().environmentObject(user).environment(\.colorScheme, .dark)
+        }
     }
 }
