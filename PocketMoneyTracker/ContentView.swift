@@ -24,7 +24,7 @@ struct ContentView: View {
             } else {
 
                 NavigationView {
-                    GeometryReader { geometry in
+                    //GeometryReader { geometry in
                         
                         VStack {
                            
@@ -55,7 +55,7 @@ struct ContentView: View {
                             }
                             .navigationBarTitle(Text(self.user.userDetails!.firstName))
                         }
-                    }
+                    //}
                 }
                 //.frame(width: 22.0)
                 .background(Color.black)

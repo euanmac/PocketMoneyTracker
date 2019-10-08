@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE05A2DD234C899100C0EE87 /* TestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05A2DC234C899100C0EE87 /* TestLayout.swift */; };
 		BE8D17452338A3DE0005A73B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D17442338A3DE0005A73B /* AppDelegate.swift */; };
 		BE8D17472338A3DE0005A73B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D17462338A3DE0005A73B /* SceneDelegate.swift */; };
 		BE8D17492338A3DE0005A73B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D17482338A3DE0005A73B /* ContentView.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BE05A2DC234C899100C0EE87 /* TestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLayout.swift; sourceTree = "<group>"; };
 		BE8D17412338A3DE0005A73B /* PocketMoneyTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PocketMoneyTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE8D17442338A3DE0005A73B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BE8D17462338A3DE0005A73B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				BE987143234BADEB0037CFBD /* DayPicker.swift */,
 				BEB61253233A813200894D9B /* TaskStatusButton.swift */,
 				BE8D174A2338A3E90005A73B /* Assets.xcassets */,
+				BE05A2DC234C899100C0EE87 /* TestLayout.swift */,
 				BE8D174F2338A3E90005A73B /* LaunchScreen.storyboard */,
 				BE8D17522338A3E90005A73B /* Info.plist */,
 				BE8D174C2338A3E90005A73B /* Preview Content */,
@@ -221,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE987144234BADEB0037CFBD /* DayPicker.swift in Sources */,
+				BE05A2DD234C899100C0EE87 /* TestLayout.swift in Sources */,
 				BEB61254233A813200894D9B /* TaskStatusButton.swift in Sources */,
 				BE8D17452338A3DE0005A73B /* AppDelegate.swift in Sources */,
 				BE8D17472338A3DE0005A73B /* SceneDelegate.swift in Sources */,

@@ -12,33 +12,37 @@ struct DayPicker: View {
     @Binding var selectedDate: Date
            
     var body: some View {
-        GeometryReader {geometry in
-            VStack(alignment: .center, spacing: 0 )  {
+        
+            VStack  {
                 HStack {
                     Text(self.selectedDate.full)
                 }
                 
-                HStack(alignment: .center, spacing: 5) {
+                HStack(alignment: .center, spacing: 15) {
                     Image(systemName: "arrowtriangle.left.circle.fill")
                         .font(.title)
                         .onTapGesture {
                             self.selectedDate = Calendar.current.date(byAdding: .day, value: -7, to: self.selectedDate)!
                     }
-                            
-                    ForEach(self.selectedDate.weekOfDates, id: \.self) { weekDate in
-                        HStack{
-                            VStack {
-                                Text(weekDate.dayInitial).font(.caption)
-                            
-                                Text(weekDate.day)
-                                    .modifier(TextDay(selected: weekDate.dateEqual(to: self.selectedDate)))
-                                    .onTapGesture {
-                                        self.selectedDate = weekDate
-                                    }
+                    Spacer()
+                    //GeometryReader {geometry in
+                        ForEach(self.selectedDate.weekOfDates, id: \.self) { weekDate in
+                            HStack(alignment: .center, spacing: 30){
+                                //Spacer()
+                                VStack {
+                                    
+                                    Text(weekDate.dayInitial).font(.caption)
+                                    Text(weekDate.day)
+                                        .modifier(TextDay(selected: weekDate.dateEqual(to: self.selectedDate)))
+                                        .onTapGesture {
+                                            self.selectedDate = weekDate
+                                    }//.frame(width: geometry.size.width, height: geometry.size.width, alignment: .topLeading)
+                                   
+                                }
                             }
-                            
-                        }
-                    }
+                        }.layoutPriority(1)
+                    //}
+                    Spacer()
                     Image(systemName: "arrowtriangle.right.circle.fill")
                         .font(.title)
                         .onTapGesture {
@@ -47,7 +51,6 @@ struct DayPicker: View {
                 }
 
             }
-        }
     }
 }
 
@@ -87,6 +90,8 @@ struct TextDay: ViewModifier {
 
 struct DayPicker_Previews: PreviewProvider {
     static var previews: some View {
-        DayPicker(selectedDate: .constant(Date()))
+        List {
+            DayPicker(selectedDate: .constant(Date()))
+        }
     }
 }
