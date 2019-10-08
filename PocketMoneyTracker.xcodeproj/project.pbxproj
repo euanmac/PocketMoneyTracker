@@ -14,6 +14,10 @@
 		BE8D174E2338A3E90005A73B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE8D174D2338A3E90005A73B /* Preview Assets.xcassets */; };
 		BE8D17512338A3E90005A73B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE8D174F2338A3E90005A73B /* LaunchScreen.storyboard */; };
 		BE8D175C2338A3EA0005A73B /* PocketMoneyTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D175B2338A3EA0005A73B /* PocketMoneyTrackerUITests.swift */; };
+		BE8D17672338A4520005A73B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D17662338A4510005A73B /* Model.swift */; };
+		BE8D1769233940CE0005A73B /* CheckboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D1768233940CE0005A73B /* CheckboxView.swift */; };
+		BE987144234BADEB0037CFBD /* DayPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE987143234BADEB0037CFBD /* DayPicker.swift */; };
+		BEB61254233A813200894D9B /* TaskStatusButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB61253233A813200894D9B /* TaskStatusButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +42,10 @@
 		BE8D17572338A3EA0005A73B /* PocketMoneyTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PocketMoneyTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE8D175B2338A3EA0005A73B /* PocketMoneyTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketMoneyTrackerUITests.swift; sourceTree = "<group>"; };
 		BE8D175D2338A3EA0005A73B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE8D17662338A4510005A73B /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		BE8D1768233940CE0005A73B /* CheckboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckboxView.swift; sourceTree = "<group>"; };
+		BE987143234BADEB0037CFBD /* DayPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPicker.swift; sourceTree = "<group>"; };
+		BEB61253233A813200894D9B /* TaskStatusButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskStatusButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +89,11 @@
 			children = (
 				BE8D17442338A3DE0005A73B /* AppDelegate.swift */,
 				BE8D17462338A3DE0005A73B /* SceneDelegate.swift */,
+				BE8D17662338A4510005A73B /* Model.swift */,
+				BE8D1768233940CE0005A73B /* CheckboxView.swift */,
 				BE8D17482338A3DE0005A73B /* ContentView.swift */,
+				BE987143234BADEB0037CFBD /* DayPicker.swift */,
+				BEB61253233A813200894D9B /* TaskStatusButton.swift */,
 				BE8D174A2338A3E90005A73B /* Assets.xcassets */,
 				BE8D174F2338A3E90005A73B /* LaunchScreen.storyboard */,
 				BE8D17522338A3E90005A73B /* Info.plist */,
@@ -208,9 +220,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE987144234BADEB0037CFBD /* DayPicker.swift in Sources */,
+				BEB61254233A813200894D9B /* TaskStatusButton.swift in Sources */,
 				BE8D17452338A3DE0005A73B /* AppDelegate.swift in Sources */,
 				BE8D17472338A3DE0005A73B /* SceneDelegate.swift in Sources */,
 				BE8D17492338A3DE0005A73B /* ContentView.swift in Sources */,
+				BE8D1769233940CE0005A73B /* CheckboxView.swift in Sources */,
+				BE8D17672338A4520005A73B /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
