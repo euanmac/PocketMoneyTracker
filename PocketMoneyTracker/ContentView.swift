@@ -83,7 +83,7 @@ struct Dashboard: View {
                 }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 Text(String(user.completions.filterBy(date: date).count))
                     .multilineTextAlignment(.trailing)
-                    .font(.headline)
+                    .font(.title)
             }
             .modifier(DashboardPanel())
             
