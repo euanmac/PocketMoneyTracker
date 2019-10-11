@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 
-struct UserDetails {
+struct UserDetails: Codable {
     var firstName: String {
         willSet(name) {
             print(name)
@@ -20,15 +20,15 @@ struct UserDetails {
     var base: Double
 }
 
-struct UserTask: Identifiable {
+struct UserTask: Identifiable, Codable {
     let id: UUID
     let description: String
     let mandatory: Bool
     let value: Double
 }
 
-struct TaskCompletion: Identifiable {
-    let id: UUID = UUID()
+struct TaskCompletion: Identifiable, Codable {
+    let id: UUID
     let taskId: UUID
     var approverId: String? = nil
     let date: Date
@@ -36,6 +36,7 @@ struct TaskCompletion: Identifiable {
     init(on date: Date, taskId: UUID) {
         self.date = date
         self.taskId = taskId
+        self.id = UUID()
     }
     
     init(taskId: UUID) {
@@ -43,12 +44,16 @@ struct TaskCompletion: Identifiable {
     }
 }
 
-struct Completions {
+struct Completions: Codable {
     typealias CompletionIndex = (TaskCompletion, Int)
     private var completions : [TaskCompletion]
     
     private init (completions: [TaskCompletion]) {
         self.completions = completions
+    }
+    
+    public var count: Int {
+        return completions.count
     }
     
     init() {
@@ -144,7 +149,7 @@ struct ScheduledTask: Identifiable {
     
 }
 
-struct Week : Identifiable {
+struct Week : Identifiable, Codable {
 
     let number: Int
     let year: Int
@@ -155,6 +160,23 @@ struct Week : Identifiable {
     var tasks: [ScheduledTask]
     private var earnedBase: Double
     private var earnedExtra: Double
+    
+    enum CodingKeys: String, CodingKey {
+        case number, year, base, id, isComplete
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        number = try values.decode(Int.self, forKey: .number)
+        year = try values.decode(Int.self, forKey: .year)
+        id  = try values.decode(Int.self, forKey: .base)
+        base  = try values.decode(Double.self, forKey: .base)
+        isComplete = try values.decode(Bool.self, forKey: .isComplete)
+        
+        tasks = [ScheduledTask]()
+        earnedBase = 0
+        earnedExtra = 0
+    }
     
     init (number: Int, year: Int, base: Double, isComplete: Bool, tasks: [ScheduledTask]) {
         self.number = number
@@ -205,8 +227,8 @@ extension Week : CustomStringConvertible {
 }
 
 
-class DataManager {
-    static let taskIds = [UUID(),UUID(),UUID(),UUID()]
+class TestDataManager : DataManager {
+    private static let taskIds = [UUID(),UUID(),UUID(),UUID()]
     
     let userDetailsPub = PassthroughSubject<UserDetails, Never>()
     let userTasksPub = PassthroughSubject<[UserTask], Never>()
@@ -244,7 +266,7 @@ class DataManager {
  
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
             
-           DispatchQueue.main.async {
+            DispatchQueue.main.async {
                 self.userDetailsPub.send(self.userDetails)
             }
         }
@@ -258,30 +280,84 @@ class DataManager {
         }
     }
     
-    func loadWeeks(tasks: [UserTask]) {
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
-            DispatchQueue.main.async {
-                self.userWeeksPub.send(self.weeks)
-            }
-        }
-
+//    func loadWeeks(tasks: [UserTask]) {
+//        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
+//            DispatchQueue.main.async {
+//                self.userWeeksPub.send(self.weeks)
+//            }
+//        }
+//
+//    }
+    
+    func saveUserDetails() {
+        
+    }
+    
+    func saveTasks() {
+        
+    }
+    
+    func saveWeeks() {
+        
     }
 }
 
-class User : ObservableObject {
+protocol DataManager {
+    var userDetailsPub: PassthroughSubject<UserDetails, Never> {get}
+    var userTasksPub: PassthroughSubject<[UserTask], Never> {get}
+    var userWeeksPub: PassthroughSubject<[Week], Never> {get}
+    func loadUserDetails()
+    func loadTasks()
+    func loadWeeks()
+    func saveUserDetails()
+    func saveTasks()
+    func saveWeeks()
+}
+
+class User : ObservableObject, Codable {
     
     let dm: DataManager
     
     @Published var userWeeks = [Week]()
     @Published var userDetails: UserDetails?
     @Published var userTasks = [UserTask]()
-    @Published var completions = Completions()
+    @Published var completions = Completions() {
+        didSet {
+            print(completions.count)
+            let encoder = JSONEncoder()
+            let data = try! encoder.encode(self)
+            let string = String(data: data, encoding: .utf8)
+            print(string)
+        }
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case userWeeks, userDetails, userTasks, completions
+    }
     
     var userDataSub: AnyCancellable?
     var userWeeksSub: AnyCancellable?
     
     init(dataManager: DataManager) {
         self.dm = dataManager
+    }
+    
+    //Decode
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        userDetails = try values.decode(UserDetails.self, forKey: .userDetails)
+        userWeeks = try values.decode([Week].self, forKey: .userWeeks)
+        userTasks = try values.decode([UserTask].self, forKey: .userTasks)
+        completions = try values.decode(Completions.self, forKey: .completions)
+        self.dm = DataManager()
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(userDetails, forKey: .userDetails)
+        try container.encode(userWeeks, forKey: .userWeeks)
+        try container.encode(userTasks, forKey: .userTasks)
+        try container.encode(completions, forKey: .completions)
     }
     
     func loadData() {
@@ -296,7 +372,7 @@ class User : ObservableObject {
                 self.dm.loadWeeks(tasks: self.userTasks)
         }
         
-        userWeeksSub = dm.userWeeksPub.assign(to: \.userWeeks, on: self)
+        //userWeeksSub = dm.userWeeksPub.assign(to: \.userWeeks, on: self)
     }
     
     func getWeek(for date: Date) -> Week? {

@@ -13,17 +13,11 @@ struct DayPicker: View {
            
     var body: some View {
         
-            VStack  {
-                HStack {
-                    Text(self.selectedDate.full)
-                        .padding(5)
-                        .foregroundColor(Color.primary)
-                        .background(Color.primary.colorInvert())
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
-                }
+            VStack(alignment: .leading, spacing: nil)  {
                 
-                HStack(alignment: .center, spacing: 0) {
+                Text(self.selectedDate.full)
+                
+                HStack() {
                     Image(systemName: "arrowtriangle.left.circle.fill")
                         .font(.title)
                         .shadow(radius: 5)
@@ -53,10 +47,17 @@ struct DayPicker: View {
                         .shadow(radius: 5)
                         .onTapGesture {
                         self.selectedDate = Calendar.current.date(byAdding: .day, value: 7, to: self.selectedDate)!
-                    }
-                }
+                        }
+                   
+                }.padding(.bottom, 20)
 
             }
+                .padding(5)
+                .foregroundColor(Color.primary)
+                .background(Color.primary.colorInvert())
+                .cornerRadius(10)
+                .shadow(radius: 5)
+                
     }
 }
 
@@ -71,7 +72,7 @@ struct TextDaySelected: ViewModifier {
 struct TextDayCurrent: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.headline)
+            .font(.title)
             .padding(5)
             .foregroundColor(Color.primary)
             .background(Color.primary.colorInvert())

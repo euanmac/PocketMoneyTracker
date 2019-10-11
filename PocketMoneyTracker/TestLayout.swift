@@ -39,12 +39,13 @@ struct TestLayout: View {
                             Text("Week").font(.caption)
                             
                         }
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        Spacer()
+                        
                         .background(Color.blue)
                         Text(String(user.completions.filterBy(weekOfYear: Date().weekOfYear).count)).font(.title)
-                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                         
                     }
-                    .modifier(DashboardPanel())
+                    .modifier(ShadowPanel())
                     
                     
                     
