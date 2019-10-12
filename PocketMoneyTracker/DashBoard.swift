@@ -72,7 +72,7 @@ struct DashBoard_Previews: PreviewProvider {
 //        user.userDetails = dm.userDetails
 //        user.userTasks = dm.tasks
 //        user.userWeeks = dm.weeks
-        let user = User(dataManager: DataManager())
+        let user = User(dataManager: TestDataManager())
         user.loadData()
         return Dashboard(date: Date()).environmentObject(user).previewDevice("iPhone SE")
     }

@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let user = User(dataManager: DataManager())
+        let user = User(dataManager: TestDataManager())
         user.loadData()
         let contentView = ContentView().environmentObject(user)
 

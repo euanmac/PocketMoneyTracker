@@ -68,11 +68,7 @@ struct TaskPanel: ViewModifier {
 
 struct TaskRow_Previews: PreviewProvider {
     static var previews: some View {
-        let dm = DataManager()
-        let user = User(dataManager: DataManager())
-        user.userDetails = dm.userDetails
-        user.userTasks = dm.tasks
-        user.userWeeks = dm.weeks
+        let user = User(dataManager: TestDataManager())
         return TaskRow(task: user.userTasks[0], date: Date()).environmentObject(user).previewDevice("iPhone SE")
     }
 }

@@ -27,102 +27,28 @@ struct TestLayout: View {
     var body: some View {
         ZStack {
             Color(UIColor.quaternarySystemFill).edgesIgnoringSafeArea(.all)
-            if (user.userDetails == nil) {
-                HStack {
-                    Text("Loading")
-                }
-            } else {
+
                
-                HStack {
-                    VStack(alignment: .leading, spacing: nil)  {
-                            Image(systemName: "calendar").font(.headline)
-                            Text("Week").font(.caption)
-                            
-                        }
-                        Spacer()
+            HStack {
+                VStack(alignment: .leading, spacing: nil)  {
+                        Image(systemName: "calendar").font(.headline)
+                        Text("Week").font(.caption)
                         
-                        .background(Color.blue)
-                        Text(String(user.completions.filterBy(weekOfYear: Date().weekOfYear).count)).font(.title)
-                         
                     }
-                    .modifier(ShadowPanel())
+                    Spacer()
                     
-                    
-                    
-                
-                    //ExtractedView()
-                    
-                
- //               NavigationView {
-//                VStack {
-//                    HStack(alignment: .center, spacing: 20) {
-//
-//                        Image(systemName: "arrowtriangle.left.circle.fill")
-//                        GeometryReader {geometry in
-//                            HStack() {
-//
-//                                ForEach(0...6 ,id: \.self) {i in
-//                                    VStack{
-//                                        Text(String(self.arr[i]))
-//                                        Text(self.arr2[i])
-//                                    }.frame(width: (geometry.size.width / CGFloat(self.arr.count+1)), height:50)
-//
-//                                }
-//
-//                            }//.frame(width: geometry.size.width, height: nil, alignment: .top)
-//
-//                        }
-//                        Image(systemName: "arrowtriangle.right.circle.fill")
-//
-//                    }
-//                        .background(Color.blue)
-//                        .padding(.all)
-//
-//
-//                HStack(alignment: .center, spacing: 20) {
-//
-//                    Image(systemName: "arrowtriangle.left.circle.fill")
-//                    GeometryReader {geometry in
-//                        HStack() {
-//
-//                            ForEach(0...6 ,id: \.self) {i in
-//                                VStack{
-//                                    Text(String(self.arr[i]))
-//                                    Text(self.arr2[i])
-//                                }.frame(width: (geometry.size.width / CGFloat(self.arr.count+1)), height:50)
-//
-//                            }
-//
-//                        }//.frame(width: geometry.size.width, height: nil, alignment: .top)
-//
-//                    }
-//                    Image(systemName: "arrowtriangle.right.circle.fill")
-//
-//                }
-//                    .background(Color.blue)
-//                    .padding(.all)
-//                }
-//                            VStack {
-//
-//                                DayPicker(selectedDate: self.$selectedDate)
-//
-//                                Dashboard(date: self.selectedDate)
-//                                ForEach(self.user.userTasks) {task in
-//                                    TaskRow(task: task, date: self.selectedDate)
-//                                }
-//
-//                            }
-//                            .navigationBarTitle(Text(self.user.userDetails!.firstName))
-//                        }
-                        
-//                    }
+                    .background(Color.blue)
+                    Text(String(user.completions.filterBy(weekOfYear: Date().weekOfYear).count)).font(.title)
+                     
                 }
-            }
-        }
-            //.frame(width: .infinity, height: .infinity, alignment: .center)
-            //.background(Color.black)
-    
-    
+                .modifier(ShadowPanel())
+            
+            
+            
+        
+           }
+            
+    }
 }
 
 
@@ -181,11 +107,8 @@ struct TestRow: View {
 struct TestLayout_Previews: PreviewProvider {
 
     static var previews: some View {
-        let dm = DataManager()
-        let user = User(dataManager: DataManager())
-        user.userDetails = dm.userDetails
-        user.userTasks = dm.tasks
-        user.userWeeks = dm.weeks
+        let dm = TestDataManager()
+        let user = User(dataManager: dm)
         return
             Group {
                 TestLayout().environmentObject(user).environment(\.colorScheme, .light)

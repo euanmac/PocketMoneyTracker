@@ -156,11 +156,7 @@ struct Week : Identifiable, Codable {
     let base: Double
     let id: Int
     var isComplete: Bool
-    
-    var tasks: [ScheduledTask]
-    private var earnedBase: Double
-    private var earnedExtra: Double
-    
+
     enum CodingKeys: String, CodingKey {
         case number, year, base, id, isComplete
     }
@@ -172,27 +168,15 @@ struct Week : Identifiable, Codable {
         id  = try values.decode(Int.self, forKey: .base)
         base  = try values.decode(Double.self, forKey: .base)
         isComplete = try values.decode(Bool.self, forKey: .isComplete)
-        
-        tasks = [ScheduledTask]()
-        earnedBase = 0
-        earnedExtra = 0
+
     }
     
-    init (number: Int, year: Int, base: Double, isComplete: Bool, tasks: [ScheduledTask]) {
+    init (number: Int, year: Int, base: Double, isComplete: Bool) {
         self.number = number
         self.year = year
         self.base = base
-        self.tasks = tasks
         self.isComplete = isComplete
         self.id = Int(String(self.year) + String(self.number))!
-
-        
-        //Calculations - earned base is 0 unless all mandatory task are completed
-        earnedBase = (tasks.reduce(true) {$0 && ($1.mandatory ? $1.completed : true)}) ? self.base : 0.0
-        
-        //Calcation - earned non mandatory
-        earnedExtra = tasks.reduce(0) {$0 + (!$1.mandatory && $1.completed ? $1.value : 0.0)}
-        print(earnedExtra)
     }
     
     var startDate: Date {
@@ -208,113 +192,36 @@ struct Week : Identifiable, Codable {
         }
     }
     
-    var earned: Double {
-        return earnedBase + earnedExtra
-    }
 }
 
 extension Week : CustomStringConvertible {
     var description: String {
         get {
-            var output = "ID: \(String(self.id))"
-            self.tasks.forEach() {
-                task in
-                    output += "\(task.description) : \(task.completed) \n"
-            }
+            let output = "ID: \(String(self.id))"
             return output
         }
     }
 }
 
 
-class TestDataManager : DataManager {
-    private static let taskIds = [UUID(),UUID(),UUID(),UUID()]
-    
-    let userDetailsPub = PassthroughSubject<UserDetails, Never>()
-    let userTasksPub = PassthroughSubject<[UserTask], Never>()
-    let userWeeksPub = PassthroughSubject<[Week], Never>()
-    
-    var userDetails: UserDetails
-    var weeks: [Week]
-    var tasks: [UserTask]
-    
-    init() {
-        userDetails = UserDetails(firstName: "Will", familyName: "Macfarlane", base: 3)
-        
-        tasks = [
-            UserTask(id: DataManager.taskIds[0], description: "Empty dishwasher", mandatory: true, value: 0),
-            UserTask(id: DataManager.taskIds[1], description: "Make bed", mandatory: false, value: 2),
-            UserTask(id: DataManager.taskIds[2], description: "Clear plates", mandatory: true, value: 3),
-            UserTask(id: DataManager.taskIds[3], description: "Clean car", mandatory: true, value: 4)
-        ]
-        
-        weeks = [
-            Week(number: 34, year: 2019, base: 3, isComplete: false, tasks: [
-                ScheduledTask(id: UUID(), task: tasks[0], completed: true),
-                ScheduledTask(id: UUID(), task: tasks[1], completed: true),
-                ScheduledTask(id: UUID(), task: tasks[2], completed: true)
-            ]),
-            Week(number: 35, year: 2019, base: 2.5, isComplete: false, tasks: [
-                ScheduledTask(id: UUID(), task: tasks[1], completed: true),
-                ScheduledTask(id: UUID(), task: tasks[2], completed: true),
-                ScheduledTask(id: UUID(), task: tasks[3], completed: false)
-            ])
-        ]
-    }
-    
-    func loadUserDetails() {
- 
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
-            
-            DispatchQueue.main.async {
-                self.userDetailsPub.send(self.userDetails)
-            }
-        }
-    }
-    
-    func loadTasks() {
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
-            DispatchQueue.main.async {
-                self.userTasksPub.send(self.tasks)
-            }
-        }
-    }
-    
-//    func loadWeeks(tasks: [UserTask]) {
-//        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
-//            DispatchQueue.main.async {
-//                self.userWeeksPub.send(self.weeks)
-//            }
-//        }
-//
-//    }
-    
-    func saveUserDetails() {
-        
-    }
-    
-    func saveTasks() {
-        
-    }
-    
-    func saveWeeks() {
-        
-    }
-}
 
 protocol DataManager {
     var userDetailsPub: PassthroughSubject<UserDetails, Never> {get}
     var userTasksPub: PassthroughSubject<[UserTask], Never> {get}
     var userWeeksPub: PassthroughSubject<[Week], Never> {get}
+    var completionsPub: PassthroughSubject<Completions, Never> {get}
+    
     func loadUserDetails()
     func loadTasks()
     func loadWeeks()
-    func saveUserDetails()
-    func saveTasks()
-    func saveWeeks()
+    func loadCompletions()
+    func saveUser(userDetails: UserDetails)
+    func saveTasks(userTasks: [UserTask])
+    func saveWeeks(weeks: [Week])
+    func saveCompletions(completions: Completions)
 }
 
-class User : ObservableObject, Codable {
+class User : ObservableObject {
     
     let dm: DataManager
     
@@ -324,52 +231,38 @@ class User : ObservableObject, Codable {
     @Published var completions = Completions() {
         didSet {
             print(completions.count)
-            let encoder = JSONEncoder()
-            let data = try! encoder.encode(self)
-            let string = String(data: data, encoding: .utf8)
-            print(string)
+            dm.saveCompletions(completions: completions)
         }
     }
+    
+    private var userDataSub: AnyCancellable?
+    private var userWeeksSub: AnyCancellable?
+    
     
     enum CodingKeys: String, CodingKey {
         case userWeeks, userDetails, userTasks, completions
     }
     
-    var userDataSub: AnyCancellable?
-    var userWeeksSub: AnyCancellable?
-    
+
     init(dataManager: DataManager) {
         self.dm = dataManager
     }
     
-    //Decode
-    required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        userDetails = try values.decode(UserDetails.self, forKey: .userDetails)
-        userWeeks = try values.decode([Week].self, forKey: .userWeeks)
-        userTasks = try values.decode([UserTask].self, forKey: .userTasks)
-        completions = try values.decode(Completions.self, forKey: .completions)
-        self.dm = DataManager()
-    }
     
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(userDetails, forKey: .userDetails)
-        try container.encode(userWeeks, forKey: .userWeeks)
-        try container.encode(userTasks, forKey: .userTasks)
-        try container.encode(completions, forKey: .completions)
-    }
     
     func loadData() {
         dm.loadUserDetails()
         dm.loadTasks()
-      
-        userDataSub = dm.userDetailsPub.combineLatest(dm.userTasksPub).sink() { userData in
+        dm.loadCompletions()
+        
+        userDataSub = dm.userDetailsPub.combineLatest(dm.userTasksPub, dm.completionsPub).sink() { userData in
                 self.userDetails = userData.0
                 self.userTasks = userData.1
-                print("User Tasks: \(self.userTasks.count)")
+                self.completions = userData.2
                 print("User Details: \(self.userDetails!.firstName)")
-                self.dm.loadWeeks(tasks: self.userTasks)
+                print("User Tasks: \(self.userTasks.count)")
+                print("Completions: \(self.completions.count)")
+                self.dm.loadWeeks()
         }
         
         //userWeeksSub = dm.userWeeksPub.assign(to: \.userWeeks, on: self)

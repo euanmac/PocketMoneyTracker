@@ -23,7 +23,6 @@ struct ContentView: View {
                 }
             } else {
 
-                //NavigationView {
                 HStack(alignment: .top, spacing: nil) {
                     VStack(alignment: .center, spacing: 20) {
                             
@@ -40,7 +39,7 @@ struct ContentView: View {
                     }
                     .padding(5)
                     .navigationBarTitle(Text(self.user.userDetails!.firstName))
-                                       //}
+                                    
 
                 }
             }
@@ -54,13 +53,8 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
   
     static var previews: some View {
-//        let dm = DataManager()
-//        let user = User(dataManager: DataManager())
-//        user.userDetails = dm.userDetails
-//        user.userTasks = dm.tasks
-//        user.userWeeks = dm.weeks
         
-        let user = User(dataManager: DataManager())
+        let user = User(dataManager: TestDataManager())
         user.loadData()
 
         //let contentView = ContentView().environmentObject(user)
