@@ -12,6 +12,11 @@ import Combine
 class TestDataManager : DataManager {
 
     private static let taskIds = [UUID(),UUID(),UUID(),UUID()]
+    private struct UserFiles {
+        static let completions = "completions.json"
+        static let userDetails = "userdetails.json"
+        static let userTasks = "usertasks.json"
+    }
     
     private let userDetails = UserDetails(
         firstName: "Will", familyName: "Macfarlane", base: 3)
@@ -69,50 +74,191 @@ class TestDataManager : DataManager {
     
     func loadCompletions() {
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
-                DispatchQueue.main.async {
-                    self.completionsPub.send(self.completions)
+            let completions = self.decodeFromFile(decodable: Completions.self, fileName: UserFiles.completions) ?? self.completions
+            
+            DispatchQueue.main.async {
+                    self.completionsPub.send(completions)
             }
         }
     }
     
     func saveTasks(userTasks: [UserTask]) {
-      
+        encodeToFile(anyCodable: completions, fileName: UserFiles.userTasks)
     }
 
     func saveWeeks(weeks: [Week]) {
-
+        //encodeToFile(anyCodable: weeks, fileName: UserFiles.weeks)
     }
 
     func saveCompletions(completions: Completions) {
-        let encoder = JSONEncoder()
-        let data = try! encoder.encode(completions)
-        let fileDir = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-        let completionsFile = fileDir.appendingPathComponent("completions.json")
-        print(completionsFile.absoluteURL)
-        do {
-            try data.write(to: completionsFile)
-        } catch {
-            print(error)
-        }
-        
-        
+        encodeToFile(anyCodable: completions, fileName: UserFiles.completions)
     }
     
     func saveUser(userDetails: UserDetails) {        
+        encodeToFile(anyCodable: userDetails, fileName: UserFiles.userDetails)
+    }
+        
+    private func encodeToFile<T: Codable> (anyCodable: T, fileName: String) {
         let encoder = JSONEncoder()
-        let data = try! encoder.encode(userDetails)
-        print(String(data: data, encoding: .utf8))
+        let data = try! encoder.encode(anyCodable)
+        let fileDir = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+        let filePath = fileDir.appendingPathComponent(fileName)
+
+        do {
+            try data.write(to: filePath)
+        } catch {
+            print(error)
+        }
     }
     
-    func saveTasks() {
+    private func decodeFromFile<T: Codable> (anyDecodable: T, fileName: String) -> T? {
         
+        let fileDir = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+        let filePath = fileDir.appendingPathComponent(fileName)
+        
+        //check file exists
+        guard FileManager().fileExists(atPath: filePath.path) else {
+            return nil
+        }
+    
+        do {
+            let jsonData = try Data(contentsOf: filePath)
+            return try JSONDecoder().decode(T.self, from: jsonData)
+            
+        } catch {
+            // contents could not be loaded
+            print (error)
+            return nil
+        }
     }
     
-    func saveWeeks() {
-        
-    }
+    private func decodeFromFile<T: Codable> (decodable: T.Type, fileName: String) -> T? {
     
-    func saveCompletions() {
+        let fileDir = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+        let filePath = fileDir.appendingPathComponent(fileName)
         
+        //check file exists
+        guard FileManager().fileExists(atPath: filePath.path) else {
+            return nil
+        }
+    
+        do {
+            let jsonData = try Data(contentsOf: filePath)
+            return try JSONDecoder().decode(T.self, from: jsonData)
+            
+        } catch {
+            // contents could not be loaded
+            print (error)
+            return nil
+        }
     }
 }
+
+//Stores user data on local file system by decoding and encoding to JSON
+class LocalDataManager : DataManager {
+
+    private struct UserFiles {
+        static let completions = "completions.json"
+        static let userDetails = "userdetails.json"
+        static let userTasks = "usertasks.json"
+    }
+    
+    let userDetailsPub = PassthroughSubject<UserDetails, Never>()
+    let userTasksPub = PassthroughSubject<[UserTask], Never>()
+    let userWeeksPub = PassthroughSubject<[Week], Never>()
+    let completionsPub = PassthroughSubject<Completions, Never>()
+    
+    
+    func loadUserDetails() {
+ 
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
+            //TODO - need to be able to pass back error if user cannot be loaded
+            let userDetails = self.decodeFromFile(decodable: UserDetails.self, fileName: UserFiles.completions)!
+            DispatchQueue.main.async {
+                self.userDetailsPub.send(userDetails)
+            }
+        }
+    }
+    
+    func loadTasks() {
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
+            //If cant load then create empty array or handle error scenario
+            let tasks = self.decodeFromFile(decodable: [UserTask].self, fileName: UserFiles.userTasks) ?? [UserTask]()
+            DispatchQueue.main.async {
+                self.userTasksPub.send(tasks)
+            }
+        }
+    }
+    
+    func loadWeeks() {
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
+            //If cant load then create empty array or handle error scenario
+//            let completions = self.decodeFromFile(decodable: Completions.self, fileName: UserFiles.completions) ?? Completions()
+//            DispatchQueue.main.async {
+//                self.userWeeksPub.send(Completions)
+//            }
+        }
+
+    }
+    
+    func loadCompletions() {
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
+            //If cant load then create empty array or handle error scenario
+            let completions = self.decodeFromFile(decodable: Completions.self, fileName: UserFiles.completions) ?? Completions()
+            DispatchQueue.main.async {
+                    self.completionsPub.send(completions)
+            }
+        }
+    }
+    
+    func saveTasks(userTasks: [UserTask]) {
+        encodeToFile(anyCodable: userTasks, fileName: UserFiles.userTasks)
+    }
+
+    func saveWeeks(weeks: [Week]) {
+        //encodeToFile(anyCodable: weeks, fileName: UserFiles.weeks)
+    }
+
+    func saveCompletions(completions: Completions) {
+        encodeToFile(anyCodable: completions, fileName: UserFiles.completions)
+    }
+    
+    func saveUser(userDetails: UserDetails) {
+        encodeToFile(anyCodable: userDetails, fileName: UserFiles.userDetails)
+    }
+        
+    private func encodeToFile<T: Codable> (anyCodable: T, fileName: String) {
+        let encoder = JSONEncoder()
+        let data = try! encoder.encode(anyCodable)
+        let fileDir = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+        let filePath = fileDir.appendingPathComponent(fileName)
+
+        do {
+            try data.write(to: filePath)
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func decodeFromFile<T: Codable> (decodable: T.Type, fileName: String) -> T? {
+    
+        let fileDir = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+        let filePath = fileDir.appendingPathComponent(fileName)
+        
+        //check file exists
+        guard FileManager().fileExists(atPath: filePath.path) else {
+            return nil
+        }
+    
+        do {
+            let jsonData = try Data(contentsOf: filePath)
+            return try JSONDecoder().decode(T.self, from: jsonData)
+            
+        } catch {
+            // contents could not be loaded
+            print (error)
+            return nil
+        }
+    }
+}
+
