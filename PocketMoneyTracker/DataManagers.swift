@@ -111,26 +111,7 @@ class TestDataManager : DataManager {
         }
     }
     
-    private func decodeFromFile<T: Codable> (anyDecodable: T, fileName: String) -> T? {
-        
-        let fileDir = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-        let filePath = fileDir.appendingPathComponent(fileName)
-        
-        //check file exists
-        guard FileManager().fileExists(atPath: filePath.path) else {
-            return nil
-        }
-    
-        do {
-            let jsonData = try Data(contentsOf: filePath)
-            return try JSONDecoder().decode(T.self, from: jsonData)
-            
-        } catch {
-            // contents could not be loaded
-            print (error)
-            return nil
-        }
-    }
+
     
     private func decodeFromFile<T: Codable> (decodable: T.Type, fileName: String) -> T? {
     
