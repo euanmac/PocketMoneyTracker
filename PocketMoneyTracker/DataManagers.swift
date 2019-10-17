@@ -19,7 +19,7 @@ class TestDataManager : DataManager {
     }
     
     private let userDetails = UserDetails(
-        firstName: "Will", familyName: "Macfarlane", base: 3)
+        firstName: "Will", familyName: "Macfarlane", base: 3, email: "wjjmac@mac.com")
     
     private let tasks = [
         UserTask(id: TestDataManager.taskIds[0], description: "Empty dishwasher", mandatory: true, value: 0),
@@ -39,10 +39,10 @@ class TestDataManager : DataManager {
         Week(number: 35, year: 2019, base: 2.5, isComplete: false),
     ]
     
-    let userDetailsPub = PassthroughSubject<UserDetails, Never>()
-    let userTasksPub = PassthroughSubject<[UserTask], Never>()
-    let userWeeksPub = PassthroughSubject<[Week], Never>()
-    let completionsPub = PassthroughSubject<Completions, Never>()
+    let userDetailsPub = PassthroughSubject<UserDetails, DataManagerError>()
+    let userTasksPub = PassthroughSubject<[UserTask], DataManagerError>()
+    let userWeeksPub = PassthroughSubject<[Week], DataManagerError>()
+    let completionsPub = PassthroughSubject<Completions, DataManagerError>()
     
     
     func loadUserDetails() {
@@ -144,19 +144,22 @@ class LocalDataManager : DataManager {
         static let userTasks = "usertasks.json"
     }
     
-    let userDetailsPub = PassthroughSubject<UserDetails, Never>()
-    let userTasksPub = PassthroughSubject<[UserTask], Never>()
-    let userWeeksPub = PassthroughSubject<[Week], Never>()
-    let completionsPub = PassthroughSubject<Completions, Never>()
+    let userDetailsPub = PassthroughSubject<UserDetails, DataManagerError>()
+    let userTasksPub = PassthroughSubject<[UserTask], DataManagerError>()
+    let userWeeksPub = PassthroughSubject<[Week], DataManagerError>()
+    let completionsPub = PassthroughSubject<Completions, DataManagerError>()
     
     
     func loadUserDetails() {
  
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
             //TODO - need to be able to pass back error if user cannot be loaded
-            let userDetails = self.decodeFromFile(decodable: UserDetails.self, fileName: UserFiles.userDetails)!
             DispatchQueue.main.async {
-                self.userDetailsPub.send(userDetails)
+                if let userDetails = self.decodeFromFile(decodable: UserDetails.self, fileName: UserFiles.userDetails) {
+                    self.userDetailsPub.send(userDetails)
+                } else {
+                    self.userDetailsPub.send(completion: .failure(DataManagerError.userNotFoundError))
+                }
             }
         }
     }

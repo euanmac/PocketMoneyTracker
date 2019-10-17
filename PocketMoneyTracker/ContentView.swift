@@ -12,17 +12,26 @@ struct ContentView: View {
     
     @EnvironmentObject var user: User
     @State var selectedDate = Date()
-    @State var completed = false
+    //@State var completed = false
+    @State var showModal = false
     
     var body: some View {
         
         ZStack {
             Color(UIColor.tertiarySystemBackground).edgesIgnoringSafeArea(.all)
             
-            if (user.userDetails == nil) {
+            if user.loadState == .notLoaded {
                 HStack {
                     Text("Loading")
                 }
+                
+            } else if user.loadState == .userNotFound {
+                HStack {
+                    Button("Show modal") {
+                        self.showModal = true
+                    }
+                }
+                
             } else {
 
                 NavigationView {
@@ -56,6 +65,11 @@ struct ContentView: View {
                 
             }
         }
+//        .sheet(isPresented: $showModal, onDismiss: {
+//            print(self.showModal)
+//        }) {
+//            //UserDetailsView()
+//        }
 
     }
     

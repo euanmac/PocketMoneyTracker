@@ -22,6 +22,8 @@
 		BE9D0219234DB8E5001070BC /* TaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9D0218234DB8E5001070BC /* TaskRow.swift */; };
 		BEB61254233A813200894D9B /* TaskStatusButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB61253233A813200894D9B /* TaskStatusButton.swift */; };
 		BEDE9A632350EEFC002B82B1 /* DataManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDE9A622350EEFC002B82B1 /* DataManagers.swift */; };
+		BEF5416A2358AE2500ADF118 /* UserDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF541692358AE2500ADF118 /* UserDetailsView.swift */; };
+		BEF5416C2358AF9C00ADF118 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5416B2358AF9C00ADF118 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,8 @@
 		BE9D0218234DB8E5001070BC /* TaskRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRow.swift; sourceTree = "<group>"; };
 		BEB61253233A813200894D9B /* TaskStatusButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskStatusButton.swift; sourceTree = "<group>"; };
 		BEDE9A622350EEFC002B82B1 /* DataManagers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagers.swift; sourceTree = "<group>"; };
+		BEF541692358AE2500ADF118 /* UserDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsView.swift; sourceTree = "<group>"; };
+		BEF5416B2358AF9C00ADF118 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,7 @@
 				BE8D17442338A3DE0005A73B /* AppDelegate.swift */,
 				BE8D17462338A3DE0005A73B /* SceneDelegate.swift */,
 				BE8D17662338A4510005A73B /* Model.swift */,
+				BEF5416B2358AF9C00ADF118 /* Constants.swift */,
 				BEDE9A622350EEFC002B82B1 /* DataManagers.swift */,
 				BE8D1768233940CE0005A73B /* CheckboxView.swift */,
 				BE8D17482338A3DE0005A73B /* ContentView.swift */,
@@ -105,6 +110,7 @@
 				BE987143234BADEB0037CFBD /* DayPicker.swift */,
 				BEB61253233A813200894D9B /* TaskStatusButton.swift */,
 				BE9D0218234DB8E5001070BC /* TaskRow.swift */,
+				BEF541692358AE2500ADF118 /* UserDetailsView.swift */,
 				BE8D174A2338A3E90005A73B /* Assets.xcassets */,
 				BE05A2DC234C899100C0EE87 /* TestLayout.swift */,
 				BE8D174F2338A3E90005A73B /* LaunchScreen.storyboard */,
@@ -237,7 +243,9 @@
 				BEB61254233A813200894D9B /* TaskStatusButton.swift in Sources */,
 				BE8D17452338A3DE0005A73B /* AppDelegate.swift in Sources */,
 				BE8D17472338A3DE0005A73B /* SceneDelegate.swift in Sources */,
+				BEF5416A2358AE2500ADF118 /* UserDetailsView.swift in Sources */,
 				BE9D0219234DB8E5001070BC /* TaskRow.swift in Sources */,
+				BEF5416C2358AF9C00ADF118 /* Constants.swift in Sources */,
 				BE8D17492338A3DE0005A73B /* ContentView.swift in Sources */,
 				BEDE9A632350EEFC002B82B1 /* DataManagers.swift in Sources */,
 				BE9D0217234DB77C001070BC /* DashBoard.swift in Sources */,

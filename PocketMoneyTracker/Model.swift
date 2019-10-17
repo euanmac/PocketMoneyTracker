@@ -11,13 +11,10 @@ import Combine
 
 
 struct UserDetails: Codable {
-    var firstName: String {
-        willSet(name) {
-            print(name)
-        }
-    }
+    var firstName: String
     var familyName: String
     var base: Double
+    var email: String
 }
 
 struct UserTask: Identifiable, Codable {
@@ -204,12 +201,17 @@ extension Week : CustomStringConvertible {
 }
 
 
+enum DataManagerError: Error {
+    case userNotFoundError
+    case loadError
+    case saveError
+}
 
 protocol DataManager {
-    var userDetailsPub: PassthroughSubject<UserDetails, Never> {get}
-    var userTasksPub: PassthroughSubject<[UserTask], Never> {get}
-    var userWeeksPub: PassthroughSubject<[Week], Never> {get}
-    var completionsPub: PassthroughSubject<Completions, Never> {get}
+    var userDetailsPub: PassthroughSubject<UserDetails, DataManagerError> {get}
+    var userTasksPub: PassthroughSubject<[UserTask], DataManagerError> {get}
+    var userWeeksPub: PassthroughSubject<[Week], DataManagerError> {get}
+    var completionsPub: PassthroughSubject<Completions, DataManagerError> {get}
     
     func loadUserDetails()
     func loadTasks()
@@ -227,6 +229,10 @@ class User : ObservableObject {
     private var userDataSub: AnyCancellable?
     private var userWeeksSub: AnyCancellable?
     
+    public enum LoadState {
+        case notLoaded, userNotFound, userDetailsLoaded, allLoaded
+    }
+    @Published var loadState: LoadState = LoadState.notLoaded
     @Published var userWeeks = [Week]()
     @Published var userDetails: UserDetails? {
         didSet {
@@ -249,31 +255,35 @@ class User : ObservableObject {
         }
     }
     
-    enum CodingKeys: String, CodingKey {
-        case userWeeks, userDetails, userTasks, completions
-    }
-    
-
     init(dataManager: DataManager) {
         self.dm = dataManager
     }
-    
-    
     
     func loadData() {
         dm.loadUserDetails()
         dm.loadTasks()
         dm.loadCompletions()
         
-        userDataSub = dm.userDetailsPub.combineLatest(dm.userTasksPub, dm.completionsPub).sink() { userData in
-                    	self.userDetails = userData.0
+        userDataSub = dm.userDetailsPub.combineLatest(dm.userTasksPub, dm.completionsPub).sink(
+            receiveCompletion: { completion in
+                switch completion {
+                case .failure(let error):
+                    self.loadState = .userNotFound
+                case .finished:
+                    print("finished")
+                }
+                
+            }
+            ,receiveValue: { userData in
+                self.userDetails = userData.0
                 self.userTasks = userData.1
                 self.completions = userData.2
                 print("User Details: \(self.userDetails!.firstName)")
                 print("User Tasks: \(self.userTasks.count)")
                 print("Completions: \(self.completions.count)")
                 self.dm.loadWeeks()
-        }
+            }
+        )
         
         //userWeeksSub = dm.userWeeksPub.assign(to: \.userWeeks, on: self)
     }
