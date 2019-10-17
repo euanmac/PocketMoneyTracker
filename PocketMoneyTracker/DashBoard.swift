@@ -60,7 +60,7 @@ struct ShadowPanel: ViewModifier {
             .padding(5)
             .background(Color.primary.colorInvert())
             .cornerRadius(10)
-            .shadow(radius: 5)
+            .shadow(radius: 2)
     }
 }
 

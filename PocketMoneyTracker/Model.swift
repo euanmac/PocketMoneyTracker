@@ -223,21 +223,31 @@ protocol DataManager {
 
 class User : ObservableObject {
     
-    let dm: DataManager
+    private let dm: DataManager
+    private var userDataSub: AnyCancellable?
+    private var userWeeksSub: AnyCancellable?
     
     @Published var userWeeks = [Week]()
-    @Published var userDetails: UserDetails?
-    @Published var userTasks = [UserTask]()
+    @Published var userDetails: UserDetails? {
+        didSet {
+            if userDetails != nil {
+                dm.saveUser(userDetails: userDetails!)
+            }
+        }
+    }
+    
+    @Published var userTasks = [UserTask]() {
+        didSet {
+            dm.saveTasks(userTasks: userTasks)
+        }
+    }
+    
     @Published var completions = Completions() {
         didSet {
             print(completions.count)
             dm.saveCompletions(completions: completions)
         }
     }
-    
-    private var userDataSub: AnyCancellable?
-    private var userWeeksSub: AnyCancellable?
-    
     
     enum CodingKeys: String, CodingKey {
         case userWeeks, userDetails, userTasks, completions
@@ -256,7 +266,7 @@ class User : ObservableObject {
         dm.loadCompletions()
         
         userDataSub = dm.userDetailsPub.combineLatest(dm.userTasksPub, dm.completionsPub).sink() { userData in
-                self.userDetails = userData.0
+                    	self.userDetails = userData.0
                 self.userTasks = userData.1
                 self.completions = userData.2
                 print("User Details: \(self.userDetails!.firstName)")

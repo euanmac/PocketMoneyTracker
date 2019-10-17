@@ -13,9 +13,12 @@ struct DayPicker: View {
            
     var body: some View {
         
-            VStack(alignment: .leading, spacing: nil)  {
+            VStack(alignment: .leading, spacing: 5)  {
                 
                 Text(self.selectedDate.full)
+                    .font(.headline)
+                    //.foregroundColor(.secondary)
+                    
                 
                 HStack() {
                     Image(systemName: "arrowtriangle.left.circle.fill")
@@ -50,13 +53,17 @@ struct DayPicker: View {
                         }
                    
                 }.padding(.bottom, 20)
-
-            }
                 .padding(5)
                 .foregroundColor(Color.primary)
                 .background(Color.primary.colorInvert())
                 .cornerRadius(10)
-                .shadow(radius: 5)
+                .shadow(radius: 2)
+            }
+//                .padding(5)
+//                .foregroundColor(Color.primary)
+//                .background(Color.primary.colorInvert())
+//                .cornerRadius(10)
+//                .shadow(radius: 5)
                 
     }
 }

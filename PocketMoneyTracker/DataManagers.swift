@@ -74,16 +74,16 @@ class TestDataManager : DataManager {
     
     func loadCompletions() {
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
-            let completions = self.decodeFromFile(decodable: Completions.self, fileName: UserFiles.completions) ?? self.completions
+            //let completions = self.decodeFromFile(decodable: Completions.self, fileName: UserFiles.completions) ?? self.completions
             
             DispatchQueue.main.async {
-                    self.completionsPub.send(completions)
+                self.completionsPub.send(self.completions)
             }
         }
     }
     
     func saveTasks(userTasks: [UserTask]) {
-        encodeToFile(anyCodable: completions, fileName: UserFiles.userTasks)
+        encodeToFile(anyCodable: userTasks, fileName: UserFiles.userTasks)
     }
 
     func saveWeeks(weeks: [Week]) {
@@ -154,7 +154,7 @@ class LocalDataManager : DataManager {
  
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0) {
             //TODO - need to be able to pass back error if user cannot be loaded
-            let userDetails = self.decodeFromFile(decodable: UserDetails.self, fileName: UserFiles.completions)!
+            let userDetails = self.decodeFromFile(decodable: UserDetails.self, fileName: UserFiles.userDetails)!
             DispatchQueue.main.async {
                 self.userDetailsPub.send(userDetails)
             }
@@ -233,6 +233,7 @@ class LocalDataManager : DataManager {
     
         do {
             let jsonData = try Data(contentsOf: filePath)
+            let decoder = JSONDecoder()
             return try JSONDecoder().decode(T.self, from: jsonData)
             
         } catch {
