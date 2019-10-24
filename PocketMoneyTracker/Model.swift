@@ -232,6 +232,7 @@ class User : ObservableObject {
     public enum LoadState {
         case notLoaded, userNotFound, userDetailsLoaded, allLoaded
     }
+    
     @Published var loadState: LoadState = LoadState.notLoaded
     @Published var userWeeks = [Week]()
     @Published var userDetails: UserDetails? {
