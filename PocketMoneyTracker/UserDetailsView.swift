@@ -9,15 +9,42 @@
 import SwiftUI
 import Combine
 
-typealias UserSetup = (firstname: String, familyName: String, base: String, email: String)
+typealias EditableUser = (firstname: String, familyName: String, base: String, email: String)
 
 struct UserDetailsView: View {
-    @Environment(\.presentationMode) var presentationMode
+
+   
     //@Binding var userDetails: UserDetails
-    @Binding var userSetup: UserSetup
-    @Binding var save: Bool
+    //@Binding var save: Bool
+
+    //var saveDetails: Bool = false
+    @Binding var editUser: EditableUser
+    //@Binding var show: Bool
+    var cancel: () -> Void
+    var save: (EditableUser) -> Void
     
-    var saveDetails: Bool = false
+//    init() {
+//        self.editUser = State(initialValue: EditableUser("", familyName: "", base: "", email: ""))
+//    }
+//
+//    init(editUserDetails: UserDetails) {
+//        self.editUser = EditableUser("", familyName: "", base: "", email: "")
+//    }
+    
+//    var editUser: EditableUser {
+//        get {
+//            guard let userDetails = userDetails else {
+//                return EditableUser("", familyName: "", base: "", email: "")
+//            }
+//            return EditableUser(
+//                userDetails.firstName,
+//                userDetails.familyName,
+//                String(userDetails.base),
+//                userDetails.email
+//            )
+//        }
+//    }
+    
     
     var body: some View {
         ZStack {
@@ -26,36 +53,33 @@ struct UserDetailsView: View {
                 HStack {
                     Text("First Name").font(.caption)
                     Spacer()
-                    TextField("First Name", text: $userSetup.firstname)
+                    TextField("First Name", text: $editUser.firstname)
                         .background(Color(UIColor.systemGray4))
                         
                 }
                 HStack {
                     Text("Family Name").font(.caption)
                     Spacer()
-                    TextField("Family Name", text: $userSetup.familyName).background(Color(UIColor.systemGray4))
+                    TextField("Family Name", text: $editUser.familyName).background(Color(UIColor.systemGray4))
                 }
                 HStack {
                    Text("Pocket Money").font(.caption)
                    Spacer()
-                   TextField("Pocket Money", text: $userSetup.base).background(Color(UIColor.systemGray4))
+                   TextField("Pocket Money", text: $editUser.base).background(Color(UIColor.systemGray4))
                 }
                 HStack {
                     Text("Email").font(.caption)
                     Spacer()
-                    TextField("Email", text: $userSetup.email).background(Color(UIColor.systemGray4))
+                    TextField("Email", text: $editUser.email).background(Color(UIColor.systemGray4))
                 }
                 HStack {
                     Button(action: {
-                        self.save = false
-                        self.presentationMode.wrappedValue.dismiss() }
+                        self.cancel() }
                         , label: {Text("Cancel")}
                     )
-                    .disabled(!validFirstName)
                     
                     Button(action: {
-                        self.save = true
-                        self.presentationMode.wrappedValue.dismiss() }
+                        self.save(self.editUser)}
                         , label: {Text("Done")}
                     )
                     .disabled(!validFirstName)
@@ -76,40 +100,61 @@ struct UserDetailsView: View {
 //    }
     
     private var validFirstName: Bool {
-        userSetup.firstname.count > 0
+        editUser.firstname.count > 0
     }
     
     private var validFamilyName: Bool {
-        userSetup.firstname.count > 0
+        editUser.firstname.count > 0
     }
     
 }
 
-struct NewUserView: View {
-    //@EnvironmentObject var user: User
-    @State var showUserDetails: Bool = false
-    @State var userDetails = UserSetup("Will", familyName: "Macfarlane", base: "3.0", email: "w@mac.com")
-    @State var saveDetails = false
+struct NewUserHost: View {
+
+    @EnvironmentObject var user: User
+    @Environment(\.presentationMode) var presentationMode
+    @State var newUser = EditableUser("", familyName: "", base: "", email: "")
+    //@State var showDetails = true
     
     var body: some View {
         
         HStack {
-            Text(userDetails.0)
-            Button(action: {self.showUserDetails = true}, label: {Text("Done")})
+            //if showDetails {
+            UserDetailsView(editUser: self.$newUser,
+                            cancel: {self.presentationMode.wrappedValue.dismiss() },
+                            save: { newUser in
+                                let userDetails = UserDetails(firstName: newUser.firstname, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
+                                self.user.userDetails = userDetails
+                                self.presentationMode.wrappedValue.dismiss()
+                                
+            })
+             //   }
         }
-        .sheet(isPresented: $showUserDetails) {
-            UserDetailsView(userSetup: self.$userDetails, save: self.$saveDetails)
-        }.onDisappear(perform:
-            {print(self.saveDetails)})
+    }
+    
+    func saveDetails(newUserDetails: EditableUser) {
+        
     }
 }
 
 struct UserDetailsView_Previews: PreviewProvider {
+    
+    @State static var showUserDetails: Bool = false
     static var previews: some View {
-        //var userDetails = UserDetails(firstName: "Will", familyName: "Macfarlane", base: 3.0, email: "w@mac.com")
-        return Group {
-            NewUserView().environment(\.colorScheme, .dark)
-            //NewUserView().environment(\.colorScheme, .light)
+        
+        let user = User(dataManager: LocalDataManager())
+        user.loadData()
+        
+        return HStack {
+            Text(user.userDetails?.firstName ?? "")
+            Button(action: {self.showUserDetails = true}, label: {Text("Add")})
+
         }
+//            .sheet(isPresented: $showUserDetails) {
+//                NewUserHost()
+//                    .environmentObject(user)
+//                    .environment(\.colorScheme, .dark)
+//            }
+
     }
 }

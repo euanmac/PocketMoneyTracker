@@ -11,10 +11,10 @@ import Combine
 
 
 struct UserDetails: Codable {
-    var firstName: String
-    var familyName: String
-    var base: Double
-    var email: String
+    let firstName: String
+    let familyName: String
+    let base: Double
+    let email: String
 }
 
 struct UserTask: Identifiable, Codable {
@@ -239,6 +239,7 @@ class User : ObservableObject {
         didSet {
             if userDetails != nil {
                 dm.saveUser(userDetails: userDetails!)
+                loadState = .userDetailsLoaded
             }
         }
     }

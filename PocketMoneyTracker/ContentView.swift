@@ -12,9 +12,9 @@ struct ContentView: View {
     
     @EnvironmentObject var user: User
     @State var selectedDate = Date()
-    //@State var completed = false
-    @State var showModal = false
-    
+    @State var showAddUser = false
+    @State var newUser = EditableUser("", familyName: "", base: "", email: "")
+     
     var body: some View {
         
         ZStack {
@@ -27,10 +27,18 @@ struct ContentView: View {
                 
             } else if user.loadState == .userNotFound {
                 HStack {
-                    Button("Show modal") {
-                        self.showModal = true
+                    Button("Show modal") {                        
+                        self.showAddUser = true
                     }
-                }
+                }.sheet(isPresented: $showAddUser) {
+                    NewUserHost().environmentObject(self.user)}
+                                
+                //.sheet(isPresented: $showAddUser, onDismiss: {
+                  //    print(saveUser.firstName)
+                  //}, content: UserDetailsView(editUser: $newUser, save: $saveUser))
+                
+                
+        
                 
             } else {
 
@@ -72,7 +80,7 @@ struct ContentView: View {
 //        }
 
     }
-    
+
 }
 
 
