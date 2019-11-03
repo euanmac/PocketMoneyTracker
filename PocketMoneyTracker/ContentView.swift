@@ -13,12 +13,11 @@ struct ContentView: View {
     @EnvironmentObject var user: User
     @State var selectedDate = Date()
     @State var showAddUser = false
-    @State var newUser = EditableUser("", familyName: "", base: "", email: "")
      
     var body: some View {
         
         ZStack {
-            Color(UIColor.tertiarySystemBackground).edgesIgnoringSafeArea(.all)
+        Color(UIColor.tertiarySystemBackground).edgesIgnoringSafeArea(.all)
             
             if user.loadState == .notLoaded {
                 HStack {
@@ -27,18 +26,11 @@ struct ContentView: View {
                 
             } else if user.loadState == .userNotFound {
                 HStack {
-                    Button("Show modal") {                        
+                    Button("Setup...") {
                         self.showAddUser = true
                     }
                 }.sheet(isPresented: $showAddUser) {
                     NewUserHost().environmentObject(self.user)}
-                                
-                //.sheet(isPresented: $showAddUser, onDismiss: {
-                  //    print(saveUser.firstName)
-                  //}, content: UserDetailsView(editUser: $newUser, save: $saveUser))
-                
-                
-        
                 
             } else {
 

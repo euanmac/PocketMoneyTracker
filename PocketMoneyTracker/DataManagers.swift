@@ -216,7 +216,7 @@ class LocalDataManager : DataManager {
         let data = try! encoder.encode(anyCodable)
         let fileDir = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
         let filePath = fileDir.appendingPathComponent(fileName)
-
+        print("Encode to: " + filePath.absoluteString)
         do {
             try data.write(to: filePath)
         } catch {
@@ -228,16 +228,18 @@ class LocalDataManager : DataManager {
     
         let fileDir = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
         let filePath = fileDir.appendingPathComponent(fileName)
+        print("Decode from: " + filePath.absoluteString)
         
         //check file exists
         guard FileManager().fileExists(atPath: filePath.path) else {
+            print("Not found:" + fileName)
             return nil
         }
     
         do {
             let jsonData = try Data(contentsOf: filePath)
-            let decoder = JSONDecoder()
             return try JSONDecoder().decode(T.self, from: jsonData)
+            
             
         } catch {
             // contents could not be loaded
