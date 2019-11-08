@@ -21,11 +21,12 @@ struct TaskRow: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
-                    Text(task.description)
+                    
                     if task.mandatory {
                         Image(systemName: "exclamationmark.circle.fill")
                             .foregroundColor(.yellow)
                     }
+                    Text(task.description)
                 }
                 if !task.mandatory {
                     Text(task.value.displayCurrency()).font(.caption)
@@ -35,18 +36,24 @@ struct TaskRow: View {
             Spacer()
             
             HStack {
+                
+                Image(systemName: "xmark.circle")
+                    .onTapGesture {
+                        self.user.completions.removeLast(taskId: self.task.id, date: self.date)
+                    }
+                    
+                Text(String(self.user.completions.filterBy(taskId: task.id, date: self.date).count))
+               
                 Image(systemName: "checkmark.circle")
                     .onTapGesture {
                        let completion = TaskCompletion(on: self.date, taskId: self.task.id)
                        self.user.completions.append(completion: completion)
                     }
-                    
-                Text(String(self.user.completions.filterBy(taskId: task.id, date: self.date).count))
-               
-                Image(systemName: "xmark.circle")
-                    .onTapGesture {
-                        self.user.completions.removeLast(taskId: self.task.id, date: self.date)
-                    }
+                
+
+                //NavigationLink(destination: Text("Hello")) {
+                    Image(systemName: "chevron.right")
+                //}
             }
             
         }

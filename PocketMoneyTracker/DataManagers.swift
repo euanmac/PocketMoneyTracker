@@ -47,7 +47,7 @@ class TestDataManager : DataManager {
     
     func loadUserDetails() {
  
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
             
             DispatchQueue.main.async {
                 self.userDetailsPub.send(self.userDetails)

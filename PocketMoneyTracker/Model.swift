@@ -253,7 +253,12 @@ class User : ObservableObject {
     @Published var userWeeks = [Week]()
     //@Published var userDetails: UserDetails?
     @Published var userTasks = [UserTask]()
-    @Published var completions = Completions()
+    var completions = Completions() {
+        willSet {
+             objectWillChange.send()
+         }
+    }
+    
 //    @Published var loadState: LoadState = LoadState.notLoaded {
 //        willSet(value) {
 //            print(value)
