@@ -13,39 +13,10 @@ typealias EditableUser = (firstname: String, familyName: String, base: String, e
 
 struct UserDetailsView: View {
 
-   
-    //@Binding var userDetails: UserDetails
-    //@Binding var save: Bool
-
-    //var saveDetails: Bool = false
-    @Binding var editUser: EditableUser
-    //@Binding var show: Bool
+    @State var editUser: EditableUser
     var cancel: () -> Void
     var save: (EditableUser) -> Void
-    
-//    init() {
-//        self.editUser = State(initialValue: EditableUser("", familyName: "", base: "", email: ""))
-//    }
-//
-//    init(editUserDetails: UserDetails) {
-//        self.editUser = EditableUser("", familyName: "", base: "", email: "")
-//    }
-    
-//    var editUser: EditableUser {
-//        get {
-//            guard let userDetails = userDetails else {
-//                return EditableUser("", familyName: "", base: "", email: "")
-//            }
-//            return EditableUser(
-//                userDetails.firstName,
-//                userDetails.familyName,
-//                String(userDetails.base),
-//                userDetails.email
-//            )
-//        }
-//    }
-    
-    
+   
     var body: some View {
         ZStack {
             Color(UIColor.systemGray5).edgesIgnoringSafeArea(.all)
@@ -91,13 +62,6 @@ struct UserDetailsView: View {
         
     }
     
-    //Save details
-//    private func updateUserDetails() {
-//        userDetails.firstName = firstName
-//        userDetails.familyName = familyName
-//        userDetails.base = base
-//        userDetails.email = email
-//    }
     
     private var validFirstName: Bool {
         editUser.firstname.count > 0
@@ -111,29 +75,30 @@ struct UserDetailsView: View {
 
 struct NewUserHost: View {
 
-    @EnvironmentObject var user: User
+    //@EnvironmentObject var user: User
     @Environment(\.presentationMode) var presentationMode
-    @State var newUser = EditableUser("", familyName: "", base: "", email: "")
-    //@State var showDetails = true
+    let newUser = EditableUser("", familyName: "", base: "", email: "")
+    let onSave: (EditableUser)->Void
     
     var body: some View {
         
         HStack {
-            //if showDetails {
-            UserDetailsView(editUser: self.$newUser,
-                            cancel: {self.presentationMode.wrappedValue.dismiss() },
-                            save: { newUser in
-                                let userDetails = UserDetails(firstName: newUser.firstname, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
-                                self.user.userDetails = userDetails
-                                self.presentationMode.wrappedValue.dismiss()
-                                
-            })
-             //   }
-        }
-    }
-    
-    func saveDetails(newUserDetails: EditableUser) {
-        
+//            UserDetailsView(editUser: self.newUser,
+//                            cancel: {self.presentationMode.wrappedValue.dismiss() },
+//                            save: { newUser in
+//                                let userDetails = UserDetails(firstName: newUser.firstname, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
+//                                self.user.userDetails = userDetails
+//                                self.presentationMode.wrappedValue.dismiss()
+//
+//            })
+            Button("Done") {
+                //let editableUser = UserDetails(firstName: "Will", familyName: "Mac", base: 3, email: "w@mac.com")
+                let editableUser = EditableUser("Will", "Mac", "3", "w@mac.com")
+                self.onSave(editableUser)
+                //self.user.loadState = .userDetailsLoaded
+                
+            }
+        }.onDisappear() {print("Hello")}
     }
 }
 
@@ -150,11 +115,5 @@ struct UserDetailsView_Previews: PreviewProvider {
             Button(action: {self.showUserDetails = true}, label: {Text("Add")})
 
         }
-//            .sheet(isPresented: $showUserDetails) {
-//                NewUserHost()
-//                    .environmentObject(user)
-//                    .environment(\.colorScheme, .dark)
-//            }
-
     }
 }

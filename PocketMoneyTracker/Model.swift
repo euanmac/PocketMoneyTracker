@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 
-struct UserDetails: Codable {
+struct UserDetails: Codable, Equatable {
     let firstName: String
     let familyName: String
     let base: Double
@@ -229,44 +229,67 @@ class User : ObservableObject {
     private var userDataSub: AnyCancellable?
     private var userWeeksSub: AnyCancellable?
     
+    var objectWillChange = PassthroughSubject<Void,Never>()
+    
     public enum LoadState {
-        case notLoaded, userNotFound, userDetailsLoaded, allLoaded
+        case notLoaded, loadingUser, userNotFound, userDetailsLoaded, allLoaded
+    }
+   
+    var loadState: LoadState = LoadState.notLoaded {
+        willSet {
+            objectWillChange.send()
+        }
     }
     
-    @Published var loadState: LoadState = LoadState.notLoaded
     @Published var userWeeks = [Week]()
-    @Published var userDetails: UserDetails? {
-        didSet {
-            if userDetails != nil {
-                dm.saveUser(userDetails: userDetails!)
-                loadState = .userDetailsLoaded
+    //@Published var userDetails: UserDetails?
+    @Published var userTasks = [UserTask]()
+    @Published var completions = Completions()
+//    @Published var loadState: LoadState = LoadState.notLoaded {
+//        willSet(value) {
+//            print(value)
+//        }
+//    }
+    
+//    @Published var userWeeks = [Week]()
+    var userDetails: UserDetails? {
+        willSet(newValue) {
+            if userDetails != newValue {
+                //dm.saveUser(userDetails: userDetails!)
+                DispatchQueue.main.async {
+                    self.loadState = .userDetailsLoaded
+                    //self.objectWillChange.send()
+                }
             }
         }
     }
-    
-    @Published var userTasks = [UserTask]() {
-        didSet {
-            dm.saveTasks(userTasks: userTasks)
-        }
-    }
-    
-    @Published var completions = Completions() {
-        didSet {
-            print(completions.count)
-            dm.saveCompletions(completions: completions)
-        }
-    }
-    
+//
+//    @Published var userTasks = [UserTask]() {
+//        didSet {
+//            dm.saveTasks(userTasks: userTasks)
+//        }
+//    }
+//
+//    @Published var completions = Completions() {
+//        didSet {
+//            print(completions.count)
+//            dm.saveCompletions(completions: completions)
+//        }
+//    }
+//
     init(dataManager: DataManager) {
         self.dm = dataManager
     }
     
     func loadData() {
+        
+        self.loadState = .loadingUser
+        
         dm.loadUserDetails()
         dm.loadTasks()
         dm.loadCompletions()
         
-        userDataSub = dm.userDetailsPub.combineLatest(dm.userTasksPub, dm.completionsPub).sink(
+        userDataSub = dm.userDetailsPub.combineLatest(dm.userTasksPub, dm.completionsPub).receive(on: RunLoop.main).sink(
             receiveCompletion: { completion in
                 switch completion {
                 case .failure(let error):
@@ -283,6 +306,7 @@ class User : ObservableObject {
                 print("User Details: \(self.userDetails!.firstName)")
                 print("User Tasks: \(self.userTasks.count)")
                 print("Completions: \(self.completions.count)")
+                self.loadState = .allLoaded
                 self.dm.loadWeeks()
             }
         )
