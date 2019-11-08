@@ -11,7 +11,8 @@ import SwiftUI
 struct SummaryView: View {
     @EnvironmentObject var user: User
     @State var selectedDate = Date()
-        
+    @State var showEditUser: Bool = false
+    
     var body: some View {
         
         print("Drawing  \(user.loadState)")
@@ -44,14 +45,36 @@ struct SummaryView: View {
                         Spacer()
                     }.padding(5)
                 }
-                .navigationBarTitle(Text(self.user.userDetails!.firstName))
-                .navigationBarItems(trailing: Button(action: {print("button pressed")}, label: {Image(systemName: "person.circle")}))
-
-        
+                .navigationBarTitle(Text(self.user.userDetails!.firstName), displayMode: .inline)
+                .navigationBarItems(trailing: Button(action: {
+                    self.showEditUser = true
+                    }, label: {Image(systemName: "person.circle")}))
+                       //.sheet(isPresented: $showEditUser) {
+                        // Text("Hi")}
+                    .sheet(isPresented: $showEditUser) { EditUserView(editUser: self.user.userDetails!.editableUser)//EditableUser("", familyName: "", base: "", email: ""))
+                     { newUser in
+                         let userDetails = UserDetails(firstName: newUser.firstName, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
+                         self.user.userDetails = userDetails
+                     }//.environmentObject(self.user)
+                 }
+                
+//                .sheet(isPresented: $showEditUser) {
+//                        EditUserView(editUser: EditableUser(user.firstName, familyName: user.familyName, base: user.base, email: user.email))
+//                            { newUser in
+//                                print(newUser)
+////                                let userDetails = UserDetails(firstName: newUser.firstName, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
+////                                self.user.userDetails = userDetails
+////                            }
+//                        }
+                
             }
+
             .background(Color(UIColor.tertiarySystemFill))
         }
     }
+    
+    
+
 
 }
 

@@ -18,9 +18,9 @@ struct AddUserView: View {
                 self.showAddUser = true
                 //self.user.userDetails = UserDetails(firstName: "Will", familyName: "Mac", base: 3, email: "w@mac.com")
             }
-        }.sheet(isPresented: $showAddUser) { NewUserHost()
+        }.sheet(isPresented: $showAddUser) { EditUserView(editUser: EditableUser("", familyName: "", base: "", email: ""))
             { newUser in
-                let userDetails = UserDetails(firstName: newUser.firstname, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
+                let userDetails = UserDetails(firstName: newUser.firstName, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
                 self.user.userDetails = userDetails
             }//.environmentObject(self.user)
         }

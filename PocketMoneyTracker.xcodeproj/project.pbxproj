@@ -23,7 +23,7 @@
 		BEB31224237159590031F857 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB31223237159590031F857 /* SummaryView.swift */; };
 		BEB61254233A813200894D9B /* TaskStatusButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB61253233A813200894D9B /* TaskStatusButton.swift */; };
 		BEDE9A632350EEFC002B82B1 /* DataManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDE9A622350EEFC002B82B1 /* DataManagers.swift */; };
-		BEE1B47D23602E6E0063D04E /* UserDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE1B47C23602E6E0063D04E /* UserDetailsView.swift */; };
+		BEE1B47D23602E6E0063D04E /* EditUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE1B47C23602E6E0063D04E /* EditUserView.swift */; };
 		BEF5416C2358AF9C00ADF118 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5416B2358AF9C00ADF118 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,7 +58,7 @@
 		BEB31223237159590031F857 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		BEB61253233A813200894D9B /* TaskStatusButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskStatusButton.swift; sourceTree = "<group>"; };
 		BEDE9A622350EEFC002B82B1 /* DataManagers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagers.swift; sourceTree = "<group>"; };
-		BEE1B47C23602E6E0063D04E /* UserDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailsView.swift; sourceTree = "<group>"; };
+		BEE1B47C23602E6E0063D04E /* EditUserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUserView.swift; sourceTree = "<group>"; };
 		BEF5416B2358AF9C00ADF118 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,7 +114,7 @@
 				BE987143234BADEB0037CFBD /* DayPicker.swift */,
 				BEB61253233A813200894D9B /* TaskStatusButton.swift */,
 				BE9D0218234DB8E5001070BC /* TaskRow.swift */,
-				BEE1B47C23602E6E0063D04E /* UserDetailsView.swift */,
+				BEE1B47C23602E6E0063D04E /* EditUserView.swift */,
 				BE8D174A2338A3E90005A73B /* Assets.xcassets */,
 				BE8D174F2338A3E90005A73B /* LaunchScreen.storyboard */,
 				BE8D17522338A3E90005A73B /* Info.plist */,
@@ -250,7 +250,7 @@
 				BE9D0219234DB8E5001070BC /* TaskRow.swift in Sources */,
 				BEF5416C2358AF9C00ADF118 /* Constants.swift in Sources */,
 				BE8D17492338A3DE0005A73B /* ContentView.swift in Sources */,
-				BEE1B47D23602E6E0063D04E /* UserDetailsView.swift in Sources */,
+				BEE1B47D23602E6E0063D04E /* EditUserView.swift in Sources */,
 				BEDE9A632350EEFC002B82B1 /* DataManagers.swift in Sources */,
 				BE9D0217234DB77C001070BC /* DashBoard.swift in Sources */,
 				BEB31224237159590031F857 /* SummaryView.swift in Sources */,

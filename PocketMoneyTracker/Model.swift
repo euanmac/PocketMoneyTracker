@@ -17,6 +17,15 @@ struct UserDetails: Codable, Equatable {
     let email: String
 }
 
+extension UserDetails {
+    var editableUser: EditableUser {
+        get {
+            return EditableUser(
+                firstName: self.firstName, familyName: self.familyName, base: String(self.base), email: self.email)
+        }
+    }
+}
+
 struct UserTask: Identifiable, Codable {
     let id: UUID
     let description: String
