@@ -52,17 +52,7 @@ struct Dashboard: View {
     }
 }
 
-struct ShadowPanel: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
-            .foregroundColor(.primary)
-            .padding(5)
-            .background(Color.primary.colorInvert())
-            .cornerRadius(10)
-            .shadow(radius: 2)
-    }
-}
+
 
 struct DashBoard_Previews: PreviewProvider {
 

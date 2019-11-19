@@ -35,7 +35,7 @@ struct EditUserView: View {
                     TextField("First Name", text: $editUser.firstName)
                     TextField("Family Name", text: $editUser.familyName)
                     TextField("Email", text: $editUser.email)
-                    TextField("Weekly Money", text: $editUser.base)
+                    TextField("Weekly Money", text: $editUser.base).keyboardType(.decimalPad)
                 }
 
             }

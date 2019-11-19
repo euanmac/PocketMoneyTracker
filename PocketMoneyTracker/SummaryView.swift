@@ -12,28 +12,38 @@ struct SummaryView: View {
     @EnvironmentObject var user: User
     @State var selectedDate = Date()
     @State var showEditUser: Bool = false
+    @State var showNewTask: Bool = false
     
     var body: some View {
         
         print("Drawing  \(user.loadState)")
         return ZStack {
             
-            Color(UIColor.tertiarySystemBackground).edgesIgnoringSafeArea(.all)
+            Color(UIColor.green).edgesIgnoringSafeArea(.all)
         
             NavigationView {
                 
                 HStack(alignment: .top, spacing: nil) {
                     
                     VStack(alignment: .leading, spacing: 10) {
-
+                        
+                        Text(self.selectedDate.full)
+                            .font(.headline)
+                        
                         DayPicker(selectedDate: self.selectedDate, dateChanged: {newDate in self.selectedDate = newDate})
-        
+                        .modifier(ShadowPanel())
+                        
                         Text("Summary").font(.headline)
                         
                         Dashboard(date: self.selectedDate)
         
-                        Text("Tasks").font(.headline)
-                        
+                        HStack {
+                            Text("Tasks").font(.headline)
+                            Spacer()
+                            Button(action: { self.showNewTask = true
+                            }, label: {Image(systemName: "square.and.pencil")})
+                                
+                            }
                         VStack {
                             ForEach(self.user.userTasks) {task in
                                 NavigationLink(destination: Text("Hello")) {
@@ -41,32 +51,49 @@ struct SummaryView: View {
                                 }
                             }
                         }
+                        .modifier(ShadowPanel())
+                        .sheet(isPresented: $showNewTask) { EditTaskView(editTask: EditableTask("",false,""), onSave:
+                            { editedTask in
+                                let task = UserTask(id: UUID(), description: editedTask.description, mandatory: editedTask.mandatory,  value: Double(editedTask.value) ?? 0)
+                                self.user.userTasks.append(task)
+                        }, onDelete: nil, canDelete: true)
+                        }
+                        
                         Spacer()
+                        
+                        HStack {
+                            Spacer()
+                            Button("Add Task") {self.showNewTask = true}
+                        }.padding(10)
                     }.padding(5)
                 }
                 .navigationBarTitle(Text(self.user.userDetails!.firstName), displayMode: .inline)
                 .navigationBarItems(trailing: Button(action: {
                     self.showEditUser = true
                     }, label: {Image(systemName: "person.circle")}))
-
-                    .sheet(isPresented: $showEditUser) { EditUserView(editUser: self.user.userDetails!.editableUser)//EditableUser("", familyName: "", base: "", email: ""))
-                     { newUser in
-                         let userDetails = UserDetails(firstName: newUser.firstName, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
-                         self.user.userDetails = userDetails
-                     }
-                 }
-                
+                .navigationBarHidden(false)
+                    .background(Color(UIColor.quaternarySystemFill))
+                //.edgesIgnoringSafeArea([.top, .bottom])
 
             }
+                
 
-            .background(Color(UIColor.tertiarySystemGroupedBackground))
+            .background(Color(UIColor.blue))
         }
+        //.accentColor(Color.)
+        .sheet(isPresented: $showEditUser) { EditUserView(editUser: self.user.userDetails!.editableUser)
+            { newUser in
+                let userDetails = UserDetails(firstName: newUser.firstName, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
+                self.user.userDetails = userDetails
+                print(userDetails)
+            }
+        }.background(Color(UIColor.yellow))
+
+        
     }
     
-    
-
-
 }
+
 
 struct SummaryView_Previews: PreviewProvider {
     static var previews: some View {

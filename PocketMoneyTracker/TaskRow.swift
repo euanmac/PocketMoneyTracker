@@ -17,65 +17,60 @@ struct TaskRow: View {
     var body: some View {
         
         
-        return HStack {
-            
-            VStack(alignment: .leading, spacing: 0) {
+        return
+            VStack {
+                HStack {
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack {
+                        
+                        if task.mandatory {
+                            Image(systemName: "exclamationmark.circle.fill")
+                                .foregroundColor(.yellow)
+                        }
+                        Text(task.description)
+                    }
+                    if !task.mandatory {
+                        Text(task.value.displayCurrency()).font(.caption)
+                    }
+                }.layoutPriority(1)
+                
+                Spacer()
+                
                 HStack {
                     
-                    if task.mandatory {
-                        Image(systemName: "exclamationmark.circle.fill")
-                            .foregroundColor(.yellow)
-                    }
-                    Text(task.description)
-                }
-                if !task.mandatory {
-                    Text(task.value.displayCurrency()).font(.caption)
-                }
-            }.layoutPriority(1)
-            
-            Spacer()
-            
-            HStack {
-                
-                Image(systemName: "xmark.circle")
-                    .onTapGesture {
-                        self.user.completions.removeLast(taskId: self.task.id, date: self.date)
-                    }
+                    Image(systemName: "xmark.circle")
+                        .onTapGesture {
+                            self.user.completions.removeLast(taskId: self.task.id, date: self.date)
+                        }
+                       
                     
-                Text(String(self.user.completions.filterBy(taskId: task.id, date: self.date).count))
-               
-                Image(systemName: "checkmark.circle")
-                    .onTapGesture {
-                       let completion = TaskCompletion(on: self.date, taskId: self.task.id)
-                       self.user.completions.append(completion: completion)
-                    }
-                
+                    Text(String(self.user.completions.filterBy(taskId: task.id, date: self.date).count))
+                   
+                    Image(systemName: "checkmark.circle")
+                        .onTapGesture {
+                           let completion = TaskCompletion(on: self.date, taskId: self.task.id)
+                           self.user.completions.append(completion: completion)
+                        }
+                    
+                    //NavigationLink(destination: Text("Hello")) {
+                        Image(systemName: "chevron.right")
+                    //
+                    
+                }
 
-                //NavigationLink(destination: Text("Hello")) {
-                    Image(systemName: "chevron.right")
-                //}
             }
-            
         }
-            .modifier(TaskPanel())
+            //.modifier(TaskPanel())
     }
 }
 
-struct TaskPanel: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            //.frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
-            .foregroundColor(.primary)
-            .padding(5)
-            .background(Color.primary.colorInvert())
-            .cornerRadius(10)
-            .shadow(radius: 2)
-    }
-}
+
 
 struct TaskRow_Previews: PreviewProvider {
     static var previews: some View {
         let user = User(dataManager: TestDataManager())
-        return TaskRow(task: user.userTasks[0], date: Date()).environmentObject(user).previewDevice("iPhone SE")
+        let task = UserTask(id: UUID(), description: "Testing task", mandatory: false, value: 3.5)
+        return TaskRow(task: task, date: Date()).environmentObject(user).previewDevice("iPhone SE")
     }
 }

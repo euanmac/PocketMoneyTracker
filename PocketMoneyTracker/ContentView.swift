@@ -23,12 +23,8 @@ struct ContentView: View {
             return AnyView(AddUserView())
             
         }
-        
     }
-
-
 }
-
 
 struct ContentView_Previews: PreviewProvider {
   

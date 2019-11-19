@@ -15,12 +15,7 @@ struct DayPicker: View {
     var body: some View {
         
             VStack(alignment: .leading, spacing: 5)  {
-                
-                Text(self.selectedDate.full)
-                    .font(.headline)
-                    //.foregroundColor(.secondary)
-                    
-                
+                                
                 HStack() {
                     Image(systemName: "arrowtriangle.left.circle.fill")
                         .font(.title)
@@ -56,18 +51,8 @@ struct DayPicker: View {
                             self.dateChanged(Calendar.current.date(byAdding: .day, value: 7, to: self.selectedDate)!)
                         }
                    
-                }.padding(.bottom, 20)
-                .padding(5)
-                .foregroundColor(Color.primary)
-                .background(Color.primary.colorInvert())
-                .cornerRadius(10)
-                .shadow(radius: 2)
+                }
             }
-//                .padding(5)
-//                .foregroundColor(Color.primary)
-//                .background(Color.primary.colorInvert())
-//                .cornerRadius(10)
-//                .shadow(radius: 5)
                 
     }
 }
@@ -77,33 +62,6 @@ struct TextDaySelected: ViewModifier {
         content
             .modifier(TextDay(selected: false))
             .colorInvert()
-    }
-}
-
-struct TextDayCurrent: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.title)
-            .padding(5)
-            .foregroundColor(Color.primary)
-            .background(Color.primary.colorInvert())
-            .cornerRadius(20)
-    }
-}
-
-struct TextDay: ViewModifier {
-    let selected: Bool
-    
-    func body(content: Content) -> some View {
-        let modified = content
-            .font(.caption)
-            .padding(5)
-            .foregroundColor(Color.primary)
-            .background(Color.primary.colorInvert())
-            .cornerRadius(20)
-            .shadow(radius: 5)
-
-        return selected ? AnyView(modified.colorInvert()) : AnyView(modified)
     }
 }
 

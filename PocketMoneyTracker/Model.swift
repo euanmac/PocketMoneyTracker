@@ -31,109 +31,20 @@ struct UserTask: Identifiable, Codable {
     let description: String
     let mandatory: Bool
     let value: Double
-}
-
-struct TaskCompletion: Identifiable, Codable {
-    let id: UUID
-    let taskId: UUID
-    var approverId: String? = nil
-    let date: Date
     
-    init(on date: Date, taskId: UUID) {
-        self.date = date
-        self.taskId = taskId
-        self.id = UUID()
-    }
-    
-    init(taskId: UUID) {
-        self.init(on: Calendar.current.startOfDay(for: Date()), taskId: taskId)
-    }
-}
-
-struct Completions: Codable {
-    typealias CompletionIndex = (TaskCompletion, Int)
-    private var completions : [TaskCompletion]
-    
-    private init (completions: [TaskCompletion]) {
-        self.completions = completions
-    }
-    
-    public var count: Int {
-        return completions.count
-    }
-    
-    init() {
-        completions = [TaskCompletion]()
-    }
-    
-    mutating func append(completion: TaskCompletion) {
-        completions.append(completion)
-    }
-    
-    mutating func remove(completion: TaskCompletion) {
-        if let id = completions.firstIndex(where: { $0.id == completion.id }) {
-            completions.remove(at: id)
-        }
-    }
-    
-    mutating func removeLast(taskId: UUID, date: Date) {
-        let dateOnly = Calendar.current.dateComponents([.day, .year, .month], from: date)
-        if let id = completions.lastIndex(where: { $0.taskId == taskId && Calendar.current.dateComponents([.day, .year, .month], from: $0.date) == dateOnly }) {
-            completions.remove(at: id)
-        }
-    }
-        
-    func filterBy(taskId: UUID) -> [TaskCompletion] {
-        return completions.filter() {
-            $0.taskId == taskId
-        }
-    }
-    
-    func filterBy(date: Date) -> [TaskCompletion] {
-        let dateOnly = Calendar.current.dateComponents([.day, .year, .month], from: date)
-        return completions.filter() {
-            Calendar.current.dateComponents([.day, .year, .month], from: $0.date) == dateOnly
-        }
-    }
-    
-    func filterBy(taskId: UUID, date: Date) -> [TaskCompletion] {
-        let dateOnly = Calendar.current.dateComponents([.day, .year, .month], from: date)
-        return completions.filter() {
-            $0.taskId == taskId && Calendar.current.dateComponents([.day, .year, .month], from: $0.date) == dateOnly
-        }
-    }
-    
-    func filterBy(weekOfYear: Int) -> [TaskCompletion] {
-        
-         return completions.filter() {
-            Calendar.current.component(.weekOfYear, from: $0.date) == weekOfYear
-         }
-     }
-    
-    func groupedByDate() -> [DateComponents: [TaskCompletion]] {
-        return  Dictionary(grouping: completions) { (task) -> DateComponents in
-            return Calendar.current.dateComponents([.day, .year, .month], from: task.date)
-        }
-    }
-    
-    func groupedByWeek() -> [Int: [TaskCompletion]] {
-        return  Dictionary(grouping: completions) { (task) -> Int in
-            return Calendar.current.component(.weekOfYear, from: task.date)
-        }
-    }
-    
-    func groupedByTask() -> [UUID: [TaskCompletion]] {
-        return  Dictionary(grouping: completions) { (task) -> UUID in
-            return task.id
-        }
-    }
-    
-    
-    func groupedBy(taskId: UUID) -> [UUID: [TaskCompletion]] {
-        let groupCompletions = Dictionary(grouping: completions) { (task) -> UUID in
-            return task.taskId
-        }
-        return groupCompletions
+    enum taskImage: String, Codable  {
+        case car = "car.fill"
+        case bed = "bed.fill"
+        case house = "house.fill"
+        case bin = "trash.fill"
+        case hammer = "hammer.fill"
+        case wand = "wand.and.stars"
+        case heart = "heart.fill"
+        case star = "star.fill"
+        case thumbsup = "hand.thumbsup.fill"
+        case flag = "flag.fill"
+        case document = "doc.text.fill"
+        case gift = "gift.fill"
     }
 }
 
