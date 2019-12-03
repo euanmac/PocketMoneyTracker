@@ -15,7 +15,8 @@ class TestDataManager : DataManager {
     private struct UserFiles {
         static let completions = "completions.json"
         static let userDetails = "userdetails.json"
-        static let userTasks = "usertasks.json"
+        static let weeks = "usertasks.json"
+        static let userTasks = "weeks.json"
     }
     
     private let userDetails = UserDetails(
@@ -35,8 +36,8 @@ class TestDataManager : DataManager {
     }()
     
     private let weeks = [
-        Week(number: 34, year: 2019, base: 3, isComplete: false),
-        Week(number: 35, year: 2019, base: 2.5, isComplete: false),
+        Week(number: 34, year: 2019, base: 3.0, isPaid: false, taskIds: [TestDataManager.taskIds[0],TestDataManager.taskIds[1],TestDataManager.taskIds[2]]),
+        Week(number: 35, year: 2019, base: 2.5, isPaid: false, taskIds: [TestDataManager.taskIds[0],TestDataManager.taskIds[1],TestDataManager.taskIds[2]])
     ]
     
     let userDetailsPub = PassthroughSubject<UserDetails, DataManagerError>()
@@ -87,7 +88,7 @@ class TestDataManager : DataManager {
     }
 
     func saveWeeks(weeks: [Week]) {
-        //encodeToFile(anyCodable: weeks, fileName: UserFiles.weeks)
+        encodeToFile(anyCodable: weeks, fileName: UserFiles.weeks)
     }
 
     func saveCompletions(completions: Completions) {
@@ -110,8 +111,6 @@ class TestDataManager : DataManager {
             print(error)
         }
     }
-    
-
     
     private func decodeFromFile<T: Codable> (decodable: T.Type, fileName: String) -> T? {
     

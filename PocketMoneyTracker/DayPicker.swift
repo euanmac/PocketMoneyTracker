@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct DayPicker: View {
-    var selectedDate: Date
-    let dateChanged: (Date) -> Void
+    @Binding var selectedDate: Date
     
     var body: some View {
         
@@ -21,8 +20,8 @@ struct DayPicker: View {
                         .font(.title)
                         .shadow(radius: 5)
                         .onTapGesture {
-                            //self.selectedDate = Calendar.current.date(byAdding: .day, value: -7, to: self.selectedDate)!
-                            self.dateChanged(Calendar.current.date(byAdding: .day, value: -7, to: self.selectedDate)!)
+                            self.selectedDate = Calendar.current.date(byAdding: .day, value: -7, to: self.selectedDate)!
+
                     }
                     
                     
@@ -34,8 +33,8 @@ struct DayPicker: View {
                                 Text(weekDate.day)
                                     .modifier(TextDay(selected: weekDate.dateEqual(to: self.selectedDate)))
                                     .onTapGesture {
-                                        //self.selectedDate = weekDate
-                                        self.dateChanged(weekDate)
+                                        self.selectedDate = weekDate
+                                        //self.dateChanged(weekDate)
                                 }.frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
                                
                             }
@@ -47,8 +46,7 @@ struct DayPicker: View {
                         .font(.title)
                         .shadow(radius: 5)
                         .onTapGesture {
-                            //self.selectedDate = Calendar.current.date(byAdding: .day, value: 7, to: self.selectedDate)!
-                            self.dateChanged(Calendar.current.date(byAdding: .day, value: 7, to: self.selectedDate)!)
+                            self.selectedDate = Calendar.current.date(byAdding: .day, value: 7, to: self.selectedDate)!
                         }
                    
                 }
@@ -67,8 +65,7 @@ struct TextDaySelected: ViewModifier {
 
 struct DayPicker_Previews: PreviewProvider {
     static var previews: some View {
-        //List {
-        DayPicker(selectedDate: Date()) {date in print(date) }
-        //}
+
+        DayPicker(selectedDate: .constant(Date()))
     }
 }

@@ -8,26 +8,15 @@
 
 import SwiftUI
 
-struct Dashboard: View {
+struct WeekSummary: View {
     
     @EnvironmentObject var user: User
     let date: Date
+    let weekComplete: Bool
     
     var body: some View {
         HStack(alignment: .center, spacing: 5) {
-            HStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    Image(systemName: "\(date.day).square").font(.headline)
-                    Text("Today").font(.caption).lineLimit(0)
 
-                }
-                Spacer()
-                Text(String(user.completions.filterBy(date: date).count))
-                    .multilineTextAlignment(.trailing)
-                    .font(.title)
-            }
-            .modifier(ShadowPanel())
-            
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
                     Image(systemName: "calendar").font(.headline)
@@ -48,8 +37,21 @@ struct Dashboard: View {
                 Spacer()
                 Text(String(user.earnedForWeek(date: date).displayCurrency())).font(.subheadline).lineLimit(0)
             }.modifier(ShadowPanel())
+            
+            if weekComplete {
+                Button("Open") {
+                     let id = Week.weekId(for: self.date)
+                     self.user.userWeeks[id] = nil
+                }
+            } else {
+                Button("Complete") {
+                    let week = Week(number: self.date.weekOfYear, year: self.date.year, base: self.user.userDetails!.base, isPaid: false, taskIds: self.user.userTasks.map{$0.id})
+                    self.user.userWeeks[week.id] = week
+                }
+            }
         }
     }
+
 }
 
 
@@ -57,14 +59,10 @@ struct Dashboard: View {
 struct DashBoard_Previews: PreviewProvider {
 
     static var previews: some View {
-//        let dm = DataManager()
-//        let user = User(dataManager: DataManager())
-//        user.userDetails = dm.userDetails
-//        user.userTasks = dm.tasks
-//        user.userWeeks = dm.weeks
+
         let user = User(dataManager: TestDataManager())
         user.loadData()
-        return Dashboard(date: Date()).environmentObject(user).previewDevice("iPhone SE")
+        return WeekSummary(date: Date(), weekComplete: false).environmentObject(user).previewDevice("iPhone SE")
     }
     
 }

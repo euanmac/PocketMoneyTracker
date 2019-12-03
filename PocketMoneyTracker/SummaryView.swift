@@ -30,12 +30,14 @@ struct SummaryView: View {
                         Text(self.selectedDate.full)
                             .font(.headline)
                         
-                        DayPicker(selectedDate: self.selectedDate, dateChanged: {newDate in self.selectedDate = newDate})
+                        DayPicker(selectedDate: self.$selectedDate)
                         .modifier(ShadowPanel())
                         
-                        Text("Summary").font(.headline)
+                        Text("Day")
+                        DaySummary(date: self.selectedDate, completions: user.completions)
                         
-                        Dashboard(date: self.selectedDate)
+                        Text("Week")
+                        WeekSummary(date: self.selectedDate,  weekComplete: selectedWeekComplete)
         
                         HStack {
                             Text("Tasks").font(.headline)
@@ -73,8 +75,7 @@ struct SummaryView: View {
                     }, label: {Image(systemName: "person.circle")}))
                 .navigationBarHidden(false)
                     .background(Color(UIColor.quaternarySystemFill))
-                //.edgesIgnoringSafeArea([.top, .bottom])
-
+               
             }
                 
 
@@ -90,6 +91,10 @@ struct SummaryView: View {
         }.background(Color(UIColor.yellow))
 
         
+    }
+    
+    private var selectedWeekComplete: Bool {
+        user.userWeeks[for:selectedDate] != nil
     }
     
 }

@@ -26,101 +26,6 @@ extension UserDetails {
     }
 }
 
-struct UserTask: Identifiable, Codable {
-    let id: UUID
-    let description: String
-    let mandatory: Bool
-    let value: Double
-    
-    enum taskImage: String, Codable  {
-        case car = "car.fill"
-        case bed = "bed.fill"
-        case house = "house.fill"
-        case bin = "trash.fill"
-        case hammer = "hammer.fill"
-        case wand = "wand.and.stars"
-        case heart = "heart.fill"
-        case star = "star.fill"
-        case thumbsup = "hand.thumbsup.fill"
-        case flag = "flag.fill"
-        case document = "doc.text.fill"
-        case gift = "gift.fill"
-    }
-}
-
-struct ScheduledTask: Identifiable {
-    
-    let id: UUID
-    var completed: Bool
-    let description: String
-    let mandatory: Bool
-    let value: Double
-
-    init(id: UUID, task: UserTask, completed: Bool) {
-        self.id = id
-        self.description = task.description
-        self.mandatory = task.mandatory
-        self.value = task.value
-        self.completed = completed
-    }
-    
-}
-
-struct Week : Identifiable, Codable {
-
-    let number: Int
-    let year: Int
-    let base: Double
-    let id: Int
-    var isComplete: Bool
-
-    enum CodingKeys: String, CodingKey {
-        case number, year, base, id, isComplete
-    }
-    
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        number = try values.decode(Int.self, forKey: .number)
-        year = try values.decode(Int.self, forKey: .year)
-        id  = try values.decode(Int.self, forKey: .base)
-        base  = try values.decode(Double.self, forKey: .base)
-        isComplete = try values.decode(Bool.self, forKey: .isComplete)
-
-    }
-    
-    init (number: Int, year: Int, base: Double, isComplete: Bool) {
-        self.number = number
-        self.year = year
-        self.base = base
-        self.isComplete = isComplete
-        self.id = Int(String(self.year) + String(self.number))!
-    }
-    
-    var startDate: Date {
-        get {
-            let dc = DateComponents(calendar: Calendar.current, weekOfYear: number, yearForWeekOfYear: self.year)
-            return Calendar.current.date(from: dc)!
-        }
-    }
-    
-    var endDate: Date {
-        get {
-            return Calendar.current.date(byAdding: .day, value: 6, to: startDate)!
-        }
-    }
-    
-}
-
-extension Week : CustomStringConvertible {
-    var description: String {
-        get {
-            let output = "ID: \(String(self.id))"
-            return output
-        }
-    }
-}
-
-
 enum DataManagerError: Error {
     case userNotFoundError
     case loadError
@@ -161,33 +66,34 @@ class User : ObservableObject {
         }
     }
     
-    @Published var userWeeks = [Week]()
-    //@Published var userDetails: UserDetails?
-    @Published var userTasks = [UserTask]()
+    var userTasks = [UserTask]() {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+    
     var completions = Completions() {
         willSet {
              objectWillChange.send()
          }
     }
     
-//    @Published var loadState: LoadState = LoadState.notLoaded {
-//        willSet(value) {
-//            print(value)
-//        }
-//    }
+    var userWeeks = [Int: Week]() {
+        willSet {
+            objectWillChange.send()
+        }
+    }
     
-//    @Published var userWeeks = [Week]()
     var userDetails: UserDetails? {
         willSet(newValue) {
             if userDetails != newValue {
-                //dm.saveUser(userDetails: userDetails!)
                 DispatchQueue.main.async {
                     self.loadState = .userDetailsLoaded
-                    //self.objectWillChange.send()
                 }
             }
         }
     }
+
 //
 //    @Published var userTasks = [UserTask]() {
 //        didSet {
@@ -239,12 +145,12 @@ class User : ObservableObject {
         //userWeeksSub = dm.userWeeksPub.assign(to: \.userWeeks, on: self)
     }
     
-    func getWeek(for date: Date) -> Week? {
-        return userWeeks.first() { week in
-            return (date >= week.startDate &&
-                    date <= week.endDate)
-        }
-    }
+//    func getWeek(for date: Date) -> Week? {
+//        return userWeeks.first() { week in
+//            return (date >= week.startDate &&
+//                    date <= week.endDate)
+//        }
+//    }
     
     func earnedForWeek(date: Date) -> Double{
         guard let userDetails = self.userDetails else {
@@ -254,26 +160,34 @@ class User : ObservableObject {
         var total: Double = 0.0
         var mandatoryCompleted = true
         
+        //Check whether week completed - if so take the tasks and base from there rather than user
+        let base = userWeeks[for: date].flatMap {$0.base} ?? userDetails.base
+        
+        //If week completed then filter the tasks based on the task ids saved for the week, otherwise just use the user tasks
+        let tasks = userWeeks[for: date].flatMap {userTasks.filter(ids: $0.taskIds)} ?? userTasks
+        
         //Get total of completions with values
         let weekCompletions = completions.filterBy(weekOfYear: date.weekOfYear)
         weekCompletions.forEach() {completion in
             
-            if let task = userTasks.first(where: {$0.id == completion.taskId} ) {
+            if let task = tasks.first(where: {$0.id == completion.taskId} ) {
                 if  !task.mandatory {
                     total += task.value
                 }
             }
         }
         
-        //Check that mandatory tasks have at least one completion
-        userTasks.forEach() {task in
+        //Check that mandatory tasks have at least one completion.
+        //Need to use tasks stored against weeks if the week is completed.
+        //This is in case any tasks have changed since that point in time
+        tasks.forEach() {task in
             if task.mandatory {
                 let count = completions.filterBy(taskId: task.id, date: date).count
                 mandatoryCompleted = mandatoryCompleted && count > 0
             }
         }
         
-        return total + (mandatoryCompleted ? userDetails.base : 0)
+        return total + (mandatoryCompleted ? base : 0)
             
     }
 }
@@ -340,4 +254,27 @@ public extension Date {
     var weekOfYear: Int {
         return Calendar.current.component(.weekOfYear, from: self)
     }
+    
+    var year: Int {
+        return Calendar.current.component(.year, from: self)
+    }
 }
+
+
+//struct ScheduledTask: Identifiable {
+//
+//    let id: UUID
+//    var completed: Bool
+//    let description: String
+//    let mandatory: Bool
+//    let value: Double
+//
+//    init(id: UUID, task: UserTask, completed: Bool) {
+//        self.id = id
+//        self.description = task.description
+//        self.mandatory = task.mandatory
+//        self.value = task.value
+//        self.completed = completed
+//    }
+//
+//}
