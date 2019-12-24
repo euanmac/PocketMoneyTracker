@@ -9,15 +9,15 @@
 import SwiftUI
 import Combine
 
-typealias EditableTask = (description: String, mandatory: Bool, value: String)
+typealias EditableTask = (description: String, mandatory: Bool, value: String, image: String, archived: Bool)
 
 struct EditTaskView: View {
 
     @Environment(\.presentationMode) var presentationMode
-    @State var editTask: EditableTask
-    let onSave: (EditableTask)->Void
-    let onDelete: (()->Void)?
-    let canDelete: Bool
+    @State var editTask: UserTask
+    let editable: Bool
+    let onSave: (UserTask)->Void
+    let onDelete: ((UserTask)->Void)?
     
     var body: some View {
 
@@ -35,7 +35,8 @@ struct EditTaskView: View {
                     TextField("Description", text: $editTask.description)
                     Toggle(isOn: $editTask.mandatory, label: {Text("Mandatory")})
                     TextField("Value", text: $editTask.value).keyboardType(.decimalPad)
-                    if (canDelete) {
+                    Image(systemName: editTask.image.rawvalue)
+                    if (onDelete != nil) {
                         Button("Delete") {
                             self.presentationMode.wrappedValue.dismiss()
                             self.onDelete?()
@@ -46,17 +47,13 @@ struct EditTaskView: View {
 
             }
     }
-    
-    private var validDescription: Bool {
-        editTask.description.count > 0
-    }
-        
-    private var validValue: Bool {
-        Double(editTask.value) != nil
-    }
+            
+//    private var validValue: Bool {
+//        Double(editTask.value) != nil
+//    }
     
     private var taskIsValid: Bool {
-        validValue && validDescription
+        editTask.isValid //validValue &&
     }
 }
 
@@ -67,7 +64,7 @@ struct TaskDetailsView_Previews: PreviewProvider {
 //        let user = User(dataManager: LocalDataManager())
 //        user.loadData()
 //
-        return EditTaskView(editTask: EditableTask("", false, value: ""), onSave: {u in print(u.description)}, onDelete: nil, canDelete: true)
+        return Text("Hello")
     
     }
 }

@@ -37,35 +37,30 @@ struct SummaryView: View {
                         DaySummary(date: self.selectedDate, completions: user.completions)
                         
                         Text("Week")
-                        WeekSummary(date: self.selectedDate,  weekComplete: selectedWeekComplete)
+                        WeekSummary(date: self.selectedDate,  weekComplete: self.user.weekEditable(for: self.selectedDate) )
         
                         HStack {
                             Text("Tasks").font(.headline)
-                            Spacer()
-                            Button(action: { self.showNewTask = true
-                            }, label: {Image(systemName: "square.and.pencil")})
+//                            Spacer()
+//                            Button(action: { self.showNewTask = true
+//                            }, label: {Image(systemName: "square.and.pencil")})
                                 
-                            }
-                        VStack {
-                            ForEach(self.user.userTasks) {task in
-                                NavigationLink(destination: Text("Hello")) {
-                                    TaskRow(task: task, date: self.selectedDate).navigationBarHidden(false)
-                                }
-                            }
                         }
-                        .modifier(ShadowPanel())
-                        .sheet(isPresented: $showNewTask) { EditTaskView(editTask: EditableTask("",false,""), onSave:
-                            { editedTask in
-                                let task = UserTask(id: UUID(), description: editedTask.description, mandatory: editedTask.mandatory,  value: Double(editedTask.value) ?? 0)
+                        .sheet(isPresented: $showNewTask) { EditTaskView(editTask: UserTask(), editable: true,  onSave:
+                            { task in
                                 self.user.userTasks.append(task)
-                        }, onDelete: nil, canDelete: true)
+                            }, onDelete: nil)
                         }
+                        
+                        TaskList(date: selectedDate)
+                        .modifier(ShadowPanel())
                         
                         Spacer()
                         
                         HStack {
                             Spacer()
                             Button("Add Task") {self.showNewTask = true}
+                                .disabled(self.user.weekEditable(for: selectedDate))
                         }.padding(10)
                     }.padding(5)
                 }
@@ -77,25 +72,20 @@ struct SummaryView: View {
                     .background(Color(UIColor.quaternarySystemFill))
                
             }
-                
 
-            .background(Color(UIColor.blue))
         }
-        //.accentColor(Color.)
-        .sheet(isPresented: $showEditUser) { EditUserView(editUser: self.user.userDetails!.editableUser)
+
+        .sheet(isPresented: $showEditUser) { EditUserView(editUser: self.user.userDetails!.editableUser, editable: true)
             { newUser in
                 let userDetails = UserDetails(firstName: newUser.firstName, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
                 self.user.userDetails = userDetails
                 print(userDetails)
             }
-        }.background(Color(UIColor.yellow))
-
+        }
         
     }
     
-    private var selectedWeekComplete: Bool {
-        user.userWeeks[for:selectedDate] != nil
-    }
+
     
 }
 

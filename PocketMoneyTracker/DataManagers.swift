@@ -23,10 +23,9 @@ class TestDataManager : DataManager {
         firstName: "Will", familyName: "Macfarlane", base: 3, email: "wjjmac@mac.com")
     
     private let tasks = [
-        UserTask(id: TestDataManager.taskIds[0], description: "Empty dishwasher", mandatory: true, value: 0),
-        UserTask(id: TestDataManager.taskIds[1], description: "Make bed", mandatory: false, value: 2),
-        UserTask(id: TestDataManager.taskIds[2], description: "Clear plates", mandatory: true, value: 3),
-        UserTask(id: TestDataManager.taskIds[3], description: "Clean car", mandatory: true, value: 4)
+        
+//        UserTask(id: TestDataManager.taskIds[0], description: "Empty dishwasher", mandatory: true, value: 0, image: .house, archived: false)
+        UserTask(id: taskIds[0])
     ]
     private var completions: Completions = {
         var completions = Completions()

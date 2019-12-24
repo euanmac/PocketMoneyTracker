@@ -13,10 +13,10 @@ struct TaskRow: View {
     @EnvironmentObject var user: User
     let task: UserTask
     let date: Date
+    let disabled: Bool
     
     var body: some View {
-        
-        
+    
         return
             VStack {
                 HStack {
@@ -39,26 +39,28 @@ struct TaskRow: View {
                 
                 HStack {
                     
-                    Image(systemName: "xmark.circle")
-                        .onTapGesture {
-                            self.user.completions.removeLast(taskId: self.task.id, date: self.date)
+                    if !disabled {
+                        Image(systemName: "xmark.circle")
+                            .onTapGesture {
+                                self.user.completions.removeLast(taskId: self.task.id, date: self.date)
                         }
+                    }
                        
                     
                     Text(String(self.user.completions.filterBy(taskId: task.id, date: self.date).count))
                    
-                    Image(systemName: "checkmark.circle")
-                        .onTapGesture {
-                           let completion = TaskCompletion(on: self.date, taskId: self.task.id)
-                           self.user.completions.append(completion: completion)
-                        }
-                    
+                    if !disabled {
+                        Image(systemName: "checkmark.circle")
+                            .onTapGesture {
+                               let completion = TaskCompletion(on: self.date, taskId: self.task.id)
+                               self.user.completions.append(completion: completion)
+                            }
+                    }
                     //NavigationLink(destination: Text("Hello")) {
                         Image(systemName: "chevron.right")
                     //
                     
-                }
-
+                    }
             }
         }
             //.modifier(TaskPanel())
@@ -70,7 +72,8 @@ struct TaskRow: View {
 struct TaskRow_Previews: PreviewProvider {
     static var previews: some View {
         let user = User(dataManager: TestDataManager())
-        let task = UserTask(id: UUID(), description: "Testing task", mandatory: false, value: 3.5)
-        return TaskRow(task: task, date: Date()).environmentObject(user).previewDevice("iPhone SE")
+        var task = UserTask()
+        task.description = "wash car"
+        return TaskRow(task: task, date: Date(), disabled: false).environmentObject(user).previewDevice("iPhone SE")
     }
 }

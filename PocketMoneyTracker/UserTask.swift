@@ -10,11 +10,22 @@ import Foundation
 
 struct UserTask: Identifiable, Codable, Hashable {
     let id: UUID
-    let description: String
+    var description: String
     let mandatory: Bool
     let value: Double
+    var image: TaskImage
+    var archived: Bool = false
     
-    enum taskImage: String, Codable  {
+    init(id: UUID = UUID(), description: String = "", mandatory: Bool = false, value: Double = 0.0, image: TaskImage = .star) {
+        self.id = id
+        self.description = description
+        self.mandatory = mandatory
+        self.value = value
+        self.image = image
+    }
+    
+    
+    enum TaskImage: String, Codable  {
         case car = "car.fill"
         case bed = "bed.fill"
         case house = "house.fill"
@@ -28,10 +39,42 @@ struct UserTask: Identifiable, Codable, Hashable {
         case document = "doc.text.fill"
         case gift = "gift.fill"
     }
+    
+    private var validDescription: Bool {
+        description.count > 0
+    }
+        
+    private var validValue: Bool {
+        !mandatory && value <= 0
+    }
+    
+    public var isValid: Bool {
+        validValue && validDescription
+    }
+    
+}
+
+extension UserTask {
+    var editableTask: EditableTask {
+        EditableTask(description: self.description, mandatory: self.mandatory, value: String(self.value), image: self.image.rawValue, archived: self.archived)
+    }
 }
 
 extension Array where Element: Identifiable & Hashable {
     func filter(ids: [Element.ID]) -> [Element] {
         return self.filter {ids.contains($0.id)}
+    }
+}
+
+extension Array where Element: Identifiable & Hashable {
+    subscript(id: Element.ID) -> Element? {
+        get {
+            return self.first {$0.id == id}
+        }
+        set {
+            if let index = self.firstIndex(where: {$0.id == id}) {
+                self[index] = newValue!
+            }
+        }
     }
 }

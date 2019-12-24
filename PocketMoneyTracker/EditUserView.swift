@@ -16,6 +16,7 @@ struct EditUserView: View {
     //@EnvironmentObject var user: User
     @Environment(\.presentationMode) var presentationMode
     @State var editUser: EditableUser
+    let editable: Bool
     let onSave: (EditableUser)->Void
     
     var body: some View {
@@ -36,7 +37,7 @@ struct EditUserView: View {
                     TextField("Family Name", text: $editUser.familyName)
                     TextField("Email", text: $editUser.email)
                     TextField("Weekly Money", text: $editUser.base).keyboardType(.decimalPad)
-                }
+                }.disabled(!editable)
 
             }
     }
@@ -66,6 +67,6 @@ struct UserDetailsView_Previews: PreviewProvider {
         let user = User(dataManager: LocalDataManager())
         user.loadData()
         
-        return EditUserView(editUser: EditableUser("", familyName: "", base: "", email: "")) {u in print(u.firstName)}
+        return EditUserView(editUser: EditableUser("", familyName: "", base: "", email: ""), editable: false) {u in print(u.firstName)}
     }
 }

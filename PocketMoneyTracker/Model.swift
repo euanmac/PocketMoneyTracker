@@ -144,13 +144,22 @@ class User : ObservableObject {
         
         //userWeeksSub = dm.userWeeksPub.assign(to: \.userWeeks, on: self)
     }
+        
+    //Returns a list of tasks for a given date. First checks for a week being complete and if so gets those tasks
+    //otherwise it returns the generic user
+    func tasks(for date: Date) -> [UserTask] {
+        return userWeeks[for: date].flatMap {userTasks.filter(ids: $0.taskIds)} ?? userTasks
+    }
     
-//    func getWeek(for date: Date) -> Week? {
-//        return userWeeks.first() { week in
-//            return (date >= week.startDate &&
-//                    date <= week.endDate)
-//        }
-//    }
+    //Determines whether a task can be deleted. If no completions then it can
+    func taskDeletable(taskId: UUID) -> Bool {
+        return (completions.filterBy(taskId: taskId).count > 0)
+    }
+    
+    //Checks whether there is a week completed for current date
+    func weekEditable(for date: Date) -> Bool {
+        return userWeeks[for: date] != nil
+    }
     
     func earnedForWeek(date: Date) -> Double{
         guard let userDetails = self.userDetails else {

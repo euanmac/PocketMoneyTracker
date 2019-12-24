@@ -10,6 +10,10 @@ import Foundation
 
 struct Week : Identifiable, Codable {
 
+    enum WeekState: Int, Codable {
+        case open, closed, paid
+    }
+    
     let number: Int
     let year: Int
     let base: Double
