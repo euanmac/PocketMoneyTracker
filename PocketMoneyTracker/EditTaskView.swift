@@ -33,15 +33,15 @@ struct EditTaskView: View {
                 }.padding(.all)
                 Form {
                     TextField("Description", text: $editTask.description)
-                    Toggle(isOn: $editTask.mandatory, label: {Text("Mandatory")})
-                    TextField("Value", text: $editTask.value).keyboardType(.decimalPad)
-                    Image(systemName: editTask.image.rawvalue)
-                    if (onDelete != nil) {
-                        Button("Delete") {
-                            self.presentationMode.wrappedValue.dismiss()
-                            self.onDelete?()
-                        }
-                    }
+//                    Toggle(isOn: $editTask.mandatory, label: {Text("Mandatory")})
+//                    TextField("Value", text: $editTask.value).keyboardType(.decimalPad)
+                    Image(systemName: editTask.image.rawValue)
+//                    if (onDelete != nil) {
+//                        Button("Delete") {
+//                            self.presentationMode.wrappedValue.dismiss()
+//                            self.onDelete?()
+//                        }
+//                    }
 
                 }
 

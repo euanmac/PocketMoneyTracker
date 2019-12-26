@@ -23,7 +23,11 @@ struct TaskList: View {
                     self.user.userTasks[newTask.id] = newTask
                 }, onDelete: { deleteTask in
                     print(deleteTask)
-                }))
+            })) {
+                TaskRow(
+            }
+            
+            
         }
     }
     
