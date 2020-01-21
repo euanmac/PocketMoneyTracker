@@ -10,25 +10,22 @@ import SwiftUI
 
 struct TaskList: View {
     @EnvironmentObject var user: User
+    @State var showEditTask: Bool = false
     let date : Date
+    var editTask: UserTask?
     
     var disableTasks: Bool {
         user.weekEditable(for: date)
     }
     
     var body: some View {
-        ForEach(user.tasks(for: date)) {task in
-            NavigationLink(destination: EditTaskView(editTask: task, editable: true,
-                onSave: { newTask in
-                    self.user.userTasks[newTask.id] = newTask
-                }, onDelete: { deleteTask in
-                    print(deleteTask)
-            })) {
-                TaskRow(
+        List {
+            ForEach(user.tasks(for: date)) {task in
+
+                TaskRow(task: task, date: self.date, disabled: false)
+                    
             }
-            
-            
-        }
+        }.background(Color(UIColor.quaternarySystemFill))
     }
     
     func saveTask(task: EditableTask) {

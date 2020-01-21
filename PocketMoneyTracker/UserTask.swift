@@ -24,10 +24,9 @@ struct UserTask: Identifiable, Codable, Hashable {
         self.image = image
     }
     
-    
-    enum TaskImage: String, Codable  {
+    enum TaskImage: String, Codable, CaseIterable, Identifiable  {
         case car = "car.fill"
-        case bed = "bed.fill"
+        case bed = "bed.double"
         case house = "house.fill"
         case bin = "trash.fill"
         case hammer = "hammer.fill"
@@ -38,6 +37,9 @@ struct UserTask: Identifiable, Codable, Hashable {
         case flag = "flag.fill"
         case document = "doc.text.fill"
         case gift = "gift.fill"
+        case bag = "bag.fill"
+        
+        var id: TaskImage {self}
     }
     
     private var validDescription: Bool {
@@ -45,13 +47,12 @@ struct UserTask: Identifiable, Codable, Hashable {
     }
         
     private var validValue: Bool {
-        !mandatory && value <= 0
+        (!mandatory && value >= 0) || mandatory
     }
     
     public var isValid: Bool {
         validValue && validDescription
     }
-    
 }
 
 extension UserTask {

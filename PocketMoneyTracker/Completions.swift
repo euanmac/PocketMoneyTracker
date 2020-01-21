@@ -60,7 +60,7 @@ struct Completions: Codable {
         }
     }
         
-    func filterBy(taskId: UUID) -> [TaskCompletion] {
+    private func filterBy(taskId: UUID) -> [TaskCompletion] {
         return completions.filter() {
             $0.taskId == taskId
         }
@@ -80,12 +80,18 @@ struct Completions: Codable {
         }
     }
     
-    func filterBy(weekOfYear: Int) -> [TaskCompletion] {
-        
-         return completions.filter() {
-            Calendar.current.component(.weekOfYear, from: $0.date) == weekOfYear
-         }
-     }
+    func filterBy(taskId: UUID? = nil, weekOfYear: Int? = nil) -> [TaskCompletion] {
+        //Filter completions by task Id if provided
+         let completionsToFilter = taskId.map({filterBy(taskId: $0)}) ?? completions
+        //If week of year provided then filter otherwise just return completions filtered by taskid
+        if weekOfYear == nil {
+            return completionsToFilter
+        } else {
+            return completionsToFilter.filter() {
+                Calendar.current.component(.weekOfYear, from: $0.date) == weekOfYear
+            }
+        }
+    }
     
     func groupedByDate() -> [DateComponents: [TaskCompletion]] {
         return  Dictionary(grouping: completions) { (task) -> DateComponents in

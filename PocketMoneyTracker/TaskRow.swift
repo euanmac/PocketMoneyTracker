@@ -14,26 +14,42 @@ struct TaskRow: View {
     let task: UserTask
     let date: Date
     let disabled: Bool
+    @State var showEditTask = false
     
     var body: some View {
     
         return
-            VStack {
+            //VStack {
                 HStack {
                 
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack {
+                    Image(systemName: task.image.rawValue)
+                    VStack(alignment: .leading, spacing: 0) {
                         
-                        if task.mandatory {
-                            Image(systemName: "exclamationmark.circle.fill")
-                                .foregroundColor(.yellow)
+                        HStack {
+                                                    
+                            Text(task.description).font(.callout)
                         }
-                        Text(task.description)
-                    }
-                    if !task.mandatory {
-                        Text(task.value.displayCurrency()).font(.caption)
-                    }
-                }.layoutPriority(1)
+                            if !task.mandatory {
+                                Text(task.value.displayCurrency()).foregroundColor(.secondary).font(.caption)
+                            } else {
+                                if (taskCompleteForWeek) {
+                                    
+                                    Text("Done For Week").font(.caption)
+                                        .padding(.horizontal, 3)
+                                        .foregroundColor(.white)
+                                        .background(Color.secondary )
+                                        .cornerRadius(5)
+                                } else {
+                                    Text("To Be Done").font(.caption)
+                                        .padding(.horizontal, 3)
+                                        .foregroundColor(.white)
+                                        .background(Color.yellow)
+                                        .cornerRadius(5)
+                                }
+                                
+                            }
+
+                    }.layoutPriority(1)
                 
                 Spacer()
                 
@@ -56,14 +72,34 @@ struct TaskRow: View {
                                self.user.completions.append(completion: completion)
                             }
                     }
-                    //NavigationLink(destination: Text("Hello")) {
-                        Image(systemName: "chevron.right")
-                    //
-                    
-                    }
-            }
+
+                }
+                
+                HStack {
+                    Image(systemName: "chevron.right").font(.headline).padding(5)
+                }
+                
+            //}
+        }.sheet(isPresented: self.$showEditTask) {
+            EditTaskView(editTask: self.task, editable: true, archivable: self.canArchive,
+                            onSave: { saveTask in
+                                self.user.userTasks[saveTask.id] = saveTask
+                            }, onDelete: { deleteTask in
+                                print(deleteTask)
+                            })
         }
-            //.modifier(TaskPanel())
+        .onTapGesture {
+            self.showEditTask = true
+        }
+        
+    }
+    
+    var canArchive: Bool {
+        user.completions.filterBy(weekOfYear: date.weekOfYear).filter({$0.id == self.task.id}).count == 0
+    }
+    
+    var taskCompleteForWeek: Bool {
+        self.user.completions.filterBy(taskId: task.id, weekOfYear: self.date.weekOfYear).count > 0
     }
 }
 

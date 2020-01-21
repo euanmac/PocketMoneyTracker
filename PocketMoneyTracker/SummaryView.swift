@@ -46,10 +46,9 @@ struct SummaryView: View {
 //                            }, label: {Image(systemName: "square.and.pencil")})
                                 
                         }
-                        .sheet(isPresented: $showNewTask) { EditTaskView(editTask: UserTask(), editable: true,  onSave:
-                            { task in
-                                self.user.userTasks.append(task)
-                            }, onDelete: nil)
+                        .sheet(isPresented: $showNewTask) {
+                            AddTaskView(onAdd: {
+                                task in self.user.userTasks.append(task)})
                         }
                         
                         TaskList(date: selectedDate)
@@ -61,7 +60,7 @@ struct SummaryView: View {
                             Spacer()
                             Button("Add Task") {self.showNewTask = true}
                                 .disabled(self.user.weekEditable(for: selectedDate))
-                        }.padding(10)
+                        }.padding(5)
                     }.padding(5)
                 }
                 .navigationBarTitle(Text(self.user.userDetails!.firstName), displayMode: .inline)

@@ -146,9 +146,15 @@ class User : ObservableObject {
     }
         
     //Returns a list of tasks for a given date. First checks for a week being complete and if so gets those tasks
-    //otherwise it returns the generic user
+    //otherwise it returns the generic user tasks (with archived tasks filtered out)
     func tasks(for date: Date) -> [UserTask] {
-        return userWeeks[for: date].flatMap {userTasks.filter(ids: $0.taskIds)} ?? userTasks
+        
+        if let week = userWeeks[for: date] {
+            return userTasks.filter(ids: week.taskIds)
+        } else {
+            return userTasks.filter({$0.archived == false})
+        }
+        
     }
     
     //Determines whether a task can be deleted. If no completions then it can

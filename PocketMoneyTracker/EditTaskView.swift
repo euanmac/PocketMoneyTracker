@@ -16,6 +16,7 @@ struct EditTaskView: View {
     @Environment(\.presentationMode) var presentationMode
     @State var editTask: UserTask
     let editable: Bool
+    let archivable: Bool
     let onSave: (UserTask)->Void
     let onDelete: ((UserTask)->Void)?
     
@@ -25,35 +26,59 @@ struct EditTaskView: View {
                 HStack {
                     Button("Cancel") {self.presentationMode.wrappedValue.dismiss()}
                     Spacer()
+                    Text("Edit Task").fontWeight(.bold)
+                    Spacer()
                     Button("Done") {
                         self.presentationMode.wrappedValue.dismiss()
                         self.onSave(self.editTask)
                     }.disabled(!taskIsValid)
                     
-                }.padding(.all)
-                Form {
-                    TextField("Description", text: $editTask.description)
-//                    Toggle(isOn: $editTask.mandatory, label: {Text("Mandatory")})
-//                    TextField("Value", text: $editTask.value).keyboardType(.decimalPad)
-                    Image(systemName: editTask.image.rawValue)
-//                    if (onDelete != nil) {
-//                        Button("Delete") {
-//                            self.presentationMode.wrappedValue.dismiss()
-//                            self.onDelete?()
-//                        }
-//                    }
+                }.padding(.top).padding(.horizontal)
+            
+                NavigationView {
+                    Form {
+                        Section(header: Text("")) {
+                            HStack {
+                                Text("Name")
+                                Spacer()
+                                TextField("Description", text: $editTask.description).multilineTextAlignment(.trailing)
+                            }.disabled(!editable)
+                            
+                            Picker(selection: $editTask.image, label: Text("Image")) {
+                                ForEach(UserTask.TaskImage.allCases) { image in
+                                    Image(systemName: image.rawValue)
+                                }
+                            }
+                            //.pickerStyle(
+                            .disabled(!editable)
+                            
+                            //These fields should always be disabled as a task's value / mandatory state cannot change after creation
+                            //To remove a task it should be archived instead
+                            if (editTask.mandatory) {
+                                Toggle("Mandatory", isOn: .constant(true)).disabled(true)
+                            } else {
+                                HStack {
+                                    Text("Value")
+                                    Spacer()
+                                    Text(editTask.value.displayCurrency()).disabled(true)
+                                }                    }
+                            
+                            //Can archive a task only if no completions for that week
+                            Toggle(isOn: $editTask.archived, label: {Text("Archived")}).disabled(!archivable)
 
+                        }
+                        .navigationBarHidden(true)
+                        .navigationBarTitle("")
+                        .onDisappear {print ("Gone")}
+                        //.padding(.top)
+                    }
                 }
 
             }
     }
-            
-//    private var validValue: Bool {
-//        Double(editTask.value) != nil
-//    }
     
     private var taskIsValid: Bool {
-        editTask.isValid //validValue &&
+        editTask.isValid
     }
 }
 

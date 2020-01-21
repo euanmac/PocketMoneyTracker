@@ -25,7 +25,12 @@ class TestDataManager : DataManager {
     private let tasks = [
         
 //        UserTask(id: TestDataManager.taskIds[0], description: "Empty dishwasher", mandatory: true, value: 0, image: .house, archived: false)
-        UserTask(id: taskIds[0])
+//        UserTask(id: taskIds[0])
+        
+        UserTask(id: TestDataManager.taskIds[0], description: "Empty dishwasher", mandatory: true, value: 0, image: .wand),
+        UserTask(id: TestDataManager.taskIds[1], description: "Make bed", mandatory: false, value: 2, image: .bed),
+        UserTask(id: TestDataManager.taskIds[2], description: "Clear plates", mandatory: true, value: 3, image: .house),
+        UserTask(id: TestDataManager.taskIds[3], description: "Clean car", mandatory: true, value: 4, image: .car)
     ]
     private var completions: Completions = {
         var completions = Completions()
@@ -35,8 +40,8 @@ class TestDataManager : DataManager {
     }()
     
     private let weeks = [
-        Week(number: 34, year: 2019, base: 3.0, isPaid: false, taskIds: [TestDataManager.taskIds[0],TestDataManager.taskIds[1],TestDataManager.taskIds[2]]),
-        Week(number: 35, year: 2019, base: 2.5, isPaid: false, taskIds: [TestDataManager.taskIds[0],TestDataManager.taskIds[1],TestDataManager.taskIds[2]])
+        Week(number: 2, year: 2019, base: 3.0, isPaid: false, taskIds: [TestDataManager.taskIds[0],TestDataManager.taskIds[1],TestDataManager.taskIds[2]]),
+        Week(number: 2, year: 2019, base: 2.5, isPaid: false, taskIds: [TestDataManager.taskIds[0],TestDataManager.taskIds[1],TestDataManager.taskIds[2]])
     ]
     
     let userDetailsPub = PassthroughSubject<UserDetails, DataManagerError>()
