@@ -20,7 +20,7 @@ struct UserTask: Identifiable, Codable, Hashable {
         self.id = id
         self.description = description
         self.mandatory = mandatory
-        self.value = value
+        self.value = mandatory ? 0 : value //if mandatory flag set then value must be 0
         self.image = image
     }
     

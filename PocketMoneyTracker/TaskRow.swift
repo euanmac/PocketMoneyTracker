@@ -80,7 +80,9 @@ struct TaskRow: View {
                 }
                 
             //}
-        }.sheet(isPresented: self.$showEditTask) {
+        }
+        .background(Color(UIColor.systemBackground))
+        .sheet(isPresented: self.$showEditTask) {
             EditTaskView(editTask: self.task, editable: true, archivable: self.canArchive,
                             onSave: { saveTask in
                                 self.user.userTasks[saveTask.id] = saveTask

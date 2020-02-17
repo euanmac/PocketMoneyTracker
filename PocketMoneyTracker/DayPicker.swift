@@ -37,7 +37,7 @@ struct DayPicker: View {
                                         //self.dateChanged(weekDate)
                                 }.frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
                                
-                            }
+                            }.transition(.scale)
                         }
                         
                     

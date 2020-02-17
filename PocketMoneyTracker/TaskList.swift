@@ -25,7 +25,9 @@ struct TaskList: View {
                 TaskRow(task: task, date: self.date, disabled: false)
                     
             }
-        }.background(Color(UIColor.quaternarySystemFill))
+        }
+        .listRowInsets(.none)
+        .background(Color(UIColor.quaternarySystemFill))
     }
     
     func saveTask(task: EditableTask) {

@@ -19,6 +19,7 @@ struct SummaryView: View {
         print("Drawing  \(user.loadState)")
         return ZStack {
             
+            
             Color(UIColor.green).edgesIgnoringSafeArea(.all)
         
             NavigationView {
@@ -41,26 +42,28 @@ struct SummaryView: View {
         
                         HStack {
                             Text("Tasks").font(.headline)
-//                            Spacer()
-//                            Button(action: { self.showNewTask = true
-//                            }, label: {Image(systemName: "square.and.pencil")})
-                                
                         }
                         .sheet(isPresented: $showNewTask) {
                             AddTaskView(onAdd: {
                                 task in self.user.userTasks.append(task)})
                         }
                         
-                        TaskList(date: selectedDate)
-                        .modifier(ShadowPanel())
+                        ZStack(alignment: .bottom) {
+                            
+                            TaskList(date: selectedDate)
+                                .modifier(ShadowPanel())
                         
-                        Spacer()
-                        
-                        HStack {
-                            Spacer()
-                            Button("Add Task") {self.showNewTask = true}
-                                .disabled(self.user.weekEditable(for: selectedDate))
-                        }.padding(5)
+                            HStack {
+                                Spacer()
+                                Button("Add Task") {self.showNewTask = true}
+                                    .disabled(self.user.weekEditable(for: selectedDate))
+                            }
+                            .padding(15)
+                            .background(Color(UIColor.systemBackground))
+                            .opacity(0.9)
+                            
+                            
+                        }
                     }.padding(5)
                 }
                 .navigationBarTitle(Text(self.user.userDetails!.firstName), displayMode: .inline)
@@ -71,7 +74,6 @@ struct SummaryView: View {
                     .background(Color(UIColor.quaternarySystemFill))
                
             }
-
         }
 
         .sheet(isPresented: $showEditUser) { EditUserView(editUser: self.user.userDetails!.editableUser, editable: true)
