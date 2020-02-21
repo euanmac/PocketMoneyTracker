@@ -34,12 +34,31 @@ struct SummaryView: View {
                         DayPicker(selectedDate: self.$selectedDate)
                         .modifier(ShadowPanel())
                         
-                        Text("Day")
-                        DaySummary(date: self.selectedDate, completions: user.completions)
-                        
-                        Text("Week")
-                        WeekSummary(date: self.selectedDate,  weekComplete: self.user.weekEditable(for: self.selectedDate) )
-        
+                        HStack {
+                            
+                            StatsView(date: self.selectedDate)
+//                            DaySummary(date: self.selectedDate, completions: user.completions)
+//
+//
+//                            WeekSummary(date: self.selectedDate,  weekComplete: self.user.weekEditable(for: self.selectedDate) )
+                        }
+                        HStack {
+                            ButtonWeekView(week: user.userWeeks[for: selectedDate]) {newState in
+                                let id = Week.weekId(for: self.selectedDate)
+                                switch newState {
+                                case .open:
+                                    self.user.userWeeks[id] = nil
+                                case .closed:
+                                   let week = Week(number: self.selectedDate.weekOfYear, year: self.selectedDate.year, base: self.user.userDetails!.base, isPaid: false, taskIds: self.user.userTasks.map{$0.id})
+                                    self.user.userWeeks[week.id] = week
+                                case .paid:
+                                    self.user.userWeeks[id]?.isPaid = true
+                                }
+                            }
+                            .buttonStyle(WeekStatusButtonStyle())
+                            .disabled(true)
+
+                        }
                         HStack {
                             Text("Tasks").font(.headline)
                         }
@@ -86,7 +105,6 @@ struct SummaryView: View {
         
     }
     
-
     
 }
 

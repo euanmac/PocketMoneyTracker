@@ -9,7 +9,6 @@
 import Foundation
 import Combine
 
-
 struct UserDetails: Codable, Equatable {
     let firstName: String
     let familyName: String
@@ -78,7 +77,7 @@ class User : ObservableObject {
          }
     }
     
-    var userWeeks = [Int: Week]() {
+    var userWeeks = Weeks() {
         willSet {
             objectWillChange.send()
         }
@@ -152,7 +151,7 @@ class User : ObservableObject {
         if let week = userWeeks[for: date] {
             return userTasks.filter(ids: week.taskIds)
         } else {
-            return userTasks.filter({$0.archived == false})
+            return userTasks.filter({$0.archived == false || completions.filterBy(taskId: $0.id, weekOfYear: date.weekOfYear).count > 0})
         }
         
     }

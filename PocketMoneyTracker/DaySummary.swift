@@ -21,7 +21,7 @@ struct DaySummary: View {
                     Text("Today").font(.caption).lineLimit(0)
 
                 }
-                Spacer()
+                
                 Text(String(completions.filterBy(date: date).count))
                     .multilineTextAlignment(.trailing)
                     .font(.title)

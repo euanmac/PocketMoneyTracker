@@ -28,7 +28,7 @@ struct TaskCompletion: Identifiable, Codable {
 }
 
 struct Completions: Codable {
-    typealias CompletionIndex = (TaskCompletion, Int)
+    
     private var completions : [TaskCompletion]
     
     private init (completions: [TaskCompletion]) {

@@ -9,12 +9,20 @@
 import Foundation
 import SwiftUI
 
+struct TextDaySelected: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .modifier(TextDay(selected: false))
+            .colorInvert()
+    }
+}
+
 struct TextDay: ViewModifier {
     let selected: Bool
     
     func body(content: Content) -> some View {
         let modified = content
-            .font(.caption)
+            .font(.subheadline)
             .padding(5)
             .foregroundColor(Color.primary)
             .background(Color.primary.colorInvert())

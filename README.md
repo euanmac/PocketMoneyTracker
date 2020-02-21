@@ -1,15 +1,15 @@
 #  Pocketmoney Tracker
 
-Edit tasks
+Object Model
 
 User
 -UserTask
     -Task
-    -TaskId
+        -TaskId
 -Completions
     -Completion
-    -TaskId
+        -TaskId
 -Weeks
     -Week
-    -TaskId
+        -TaskId
 

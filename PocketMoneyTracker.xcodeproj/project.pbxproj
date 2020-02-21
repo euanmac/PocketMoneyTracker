@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE1D6AE623FF40EE001F56F7 /* LockButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1D6AE523FF40EE001F56F7 /* LockButtonView.swift */; };
 		BE31DB84237E91D40055F257 /* Completions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE31DB83237E91D40055F257 /* Completions.swift */; };
 		BE3E4439238468930033B2F5 /* Week.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3E4438238468930033B2F5 /* Week.swift */; };
 		BE3E443B2385EF960033B2F5 /* DaySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3E443A2385EF960033B2F5 /* DaySummary.swift */; };
 		BE5C61F623D62325003B010B /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5C61F523D62324003B010B /* AddTaskView.swift */; };
+		BE73EBAD23FB0E7F0085BC27 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */; };
+		BE73EBAF23FC5CD80085BC27 /* WeekButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73EBAE23FC5CD80085BC27 /* WeekButtonView.swift */; };
 		BE7EC890239834F600FBCBC1 /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7EC88F239834F600FBCBC1 /* TaskList.swift */; };
 		BE8D17452338A3DE0005A73B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D17442338A3DE0005A73B /* AppDelegate.swift */; };
 		BE8D17472338A3DE0005A73B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D17462338A3DE0005A73B /* SceneDelegate.swift */; };
@@ -44,10 +47,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BE1D6AE523FF40EE001F56F7 /* LockButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockButtonView.swift; sourceTree = "<group>"; };
 		BE31DB83237E91D40055F257 /* Completions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completions.swift; sourceTree = "<group>"; };
 		BE3E4438238468930033B2F5 /* Week.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Week.swift; sourceTree = "<group>"; };
 		BE3E443A2385EF960033B2F5 /* DaySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaySummary.swift; sourceTree = "<group>"; };
 		BE5C61F523D62324003B010B /* AddTaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
+		BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		BE73EBAE23FC5CD80085BC27 /* WeekButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekButtonView.swift; sourceTree = "<group>"; };
 		BE780FA423A3740A0071CAB2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		BE7EC88F239834F600FBCBC1 /* TaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskList.swift; sourceTree = "<group>"; };
 		BE8D17412338A3DE0005A73B /* PocketMoneyTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PocketMoneyTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,9 +132,12 @@
 				BEB312212370E1380031F857 /* AddUserView.swift */,
 				BEB3121F2370DE760031F857 /* LoadingView.swift */,
 				BEB31223237159590031F857 /* SummaryView.swift */,
+				BE1D6AE523FF40EE001F56F7 /* LockButtonView.swift */,
+				BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */,
 				BE9D0216234DB77C001070BC /* WeekSummary.swift */,
 				BE3E443A2385EF960033B2F5 /* DaySummary.swift */,
 				BE987143234BADEB0037CFBD /* DayPicker.swift */,
+				BE73EBAE23FC5CD80085BC27 /* WeekButtonView.swift */,
 				BE9D2CB7237D37A70049987C /* ViewStyles.swift */,
 				BE7EC88F239834F600FBCBC1 /* TaskList.swift */,
 				BE9D0218234DB8E5001070BC /* TaskRow.swift */,
@@ -266,8 +275,10 @@
 				BEB312222370E1380031F857 /* AddUserView.swift in Sources */,
 				BE3E443B2385EF960033B2F5 /* DaySummary.swift in Sources */,
 				BE8D17452338A3DE0005A73B /* AppDelegate.swift in Sources */,
+				BE73EBAD23FB0E7F0085BC27 /* StatsView.swift in Sources */,
 				BE31DB84237E91D40055F257 /* Completions.swift in Sources */,
 				BE3E4439238468930033B2F5 /* Week.swift in Sources */,
+				BE73EBAF23FC5CD80085BC27 /* WeekButtonView.swift in Sources */,
 				BE8D17472338A3DE0005A73B /* SceneDelegate.swift in Sources */,
 				BEB312202370DE760031F857 /* LoadingView.swift in Sources */,
 				BE9D0219234DB8E5001070BC /* TaskRow.swift in Sources */,
@@ -281,6 +292,7 @@
 				BE9D0217234DB77C001070BC /* WeekSummary.swift in Sources */,
 				BEB31224237159590031F857 /* SummaryView.swift in Sources */,
 				BE8D17672338A4520005A73B /* Model.swift in Sources */,
+				BE1D6AE623FF40EE001F56F7 /* LockButtonView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

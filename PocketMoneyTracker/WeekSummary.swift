@@ -38,17 +38,17 @@ struct WeekSummary: View {
                 Text(String(user.earnedForWeek(date: date).displayCurrency())).font(.subheadline).lineLimit(0)
             }.modifier(ShadowPanel())
             
-            if weekComplete {
-                Button("Open") {
-                     let id = Week.weekId(for: self.date)
-                     self.user.userWeeks[id] = nil
-                }
-            } else {
-                Button("Complete") {
-                    let week = Week(number: self.date.weekOfYear, year: self.date.year, base: self.user.userDetails!.base, isPaid: false, taskIds: self.user.userTasks.map{$0.id})
-                    self.user.userWeeks[week.id] = week
-                }
-            }
+//            if weekComplete {
+//                Button("Open") {
+//                     let id = Week.weekId(for: self.date)
+//                     self.user.userWeeks[id] = nil
+//                }
+//            } else {
+//                Button("Complete") {
+//                    let week = Week(number: self.date.weekOfYear, year: self.date.year, base: self.user.userDetails!.base, isPaid: false, taskIds: self.user.userTasks.map{$0.id})
+//                    self.user.userWeeks[week.id] = week
+//                }
+//            }
         }
     }
 

@@ -8,17 +8,29 @@
 
 import Foundation
 
+//Instead of defining a wrapper around dictionary, try using type alias instead along with extension
+typealias Weeks = [Int : Week]
+
+//Extend dictionary to provide a subscript lookup for a given date
+//extension Dictionary where Key == Int, Value == Week {
+extension Weeks {
+
+    subscript (for date: Date) -> Week? {
+        get {
+            return self[Week.weekId(for: date)]
+        }
+
+    }
+}
+
 struct Week : Identifiable, Codable {
 
-    enum WeekState: Int, Codable {
-        case open, closed, paid
-    }
     
     let number: Int
     let year: Int
     let base: Double
     let id: Int
-    let isPaid: Bool
+    var isPaid: Bool
     let taskIds: [UUID]
 
 //    enum CodingKeys: String, CodingKey {
@@ -89,12 +101,4 @@ extension Week : CustomStringConvertible {
 //    }
 //}
 
-//Extend dictionary to provide a subscript lookup for a given date
-extension Dictionary where Key == Int, Value == Week {
-    subscript (for date: Date) -> Week? {
-        get {
-            return self[Week.weekId(for: date)]
-        }
 
-    }
-}
