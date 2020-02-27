@@ -13,10 +13,13 @@ struct LockButtonView: View {
     let action: (Bool) -> Void
     
     var body: some View {
-        Button (action: {self.isLocked.toggle()}) {
-            Image(systemName: imageName)
-            }
+        //GeometryReader() {geo in
+            Button (action: {self.isLocked.toggle()}) {
+                Image(systemName: self.imageName)
+                }
+         //   }
         .buttonStyle(LockButtonStyle())
+            
     }
     
     var imageName: String {

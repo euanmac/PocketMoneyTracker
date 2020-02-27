@@ -14,46 +14,50 @@ struct StatsView: View {
     
     var body: some View {
 
+            
+            HStack(alignment: .center, spacing: 5) {
+                //GeometryReader () { geometry in
+                
+                HStack {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Image(systemName: "\(self.date.day).square").font(.headline)
+                        Text("Today").font(.caption).lineLimit(0)
 
-        HStack(alignment: .center, spacing: 5) {
-            HStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    Image(systemName: "\(date.day).square").font(.headline)
-                    Text("Today").font(.caption).lineLimit(0)
-
+                    }
+                    Spacer()
+                    Text(String(self.user.completions.filterBy(date: self.date).count))
+                        .multilineTextAlignment(.trailing)
+                        .font(.title)
                 }
-                Spacer()
-                Text(String(user.completions.filterBy(date: date).count))
-                    .multilineTextAlignment(.trailing)
-                    .font(.title)
-            }
-            .modifier(ShadowPanel())
+                .modifier(ShadowPanel())
 
-            HStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    Image(systemName: "calendar").font(.headline)
-                    Text("Week").font(.caption)
+                HStack {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Image(systemName: "calendar").font(.headline)
+                        Text("Week").font(.caption)
+                        
+                    }
+                    Spacer()
+                    Text(String(self.user.completions.filterBy(weekOfYear: self.date.weekOfYear).count)).font(.title)
+                        .multilineTextAlignment(.trailing)
+                }
+                .modifier(ShadowPanel())
+                
+                HStack {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Image(systemName: "sterlingsign.square").font(.headline)
+                        Text("Week").font(.caption)
+                    }
+                    Spacer()
+                    Text(String(self.user.earnedForWeek(date: self.date).displayCurrency())).font(.body).lineLimit(0)    
+                }
+            
+                .modifier(ShadowPanel())
+                
                     
-                }
-                Spacer()
-                Text(String(user.completions.filterBy(weekOfYear: date.weekOfYear).count)).font(.title)
-                    .multilineTextAlignment(.trailing)
-            }
-            .modifier(ShadowPanel())
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    Image(systemName: "sterlingsign.square").font(.headline)
-                    Text("Week").font(.caption)
-                }
-                Spacer()
-                Text(String(user.earnedForWeek(date: date).displayCurrency())).font(.body).lineLimit(0)
-            }.modifier(ShadowPanel())
-            
-
+                   //§ }// .fixedSize()
         }
-        
-        
+
         
         
         

@@ -34,31 +34,39 @@ struct SummaryView: View {
                         DayPicker(selectedDate: self.$selectedDate)
                         .modifier(ShadowPanel())
                         
-                        HStack {
-                            
-                            StatsView(date: self.selectedDate)
-//                            DaySummary(date: self.selectedDate, completions: user.completions)
-//
-//
-//                            WeekSummary(date: self.selectedDate,  weekComplete: self.user.weekEditable(for: self.selectedDate) )
-                        }
-                        HStack {
-                            ButtonWeekView(week: user.userWeeks[for: selectedDate]) {newState in
-                                let id = Week.weekId(for: self.selectedDate)
-                                switch newState {
-                                case .open:
-                                    self.user.userWeeks[id] = nil
-                                case .closed:
-                                   let week = Week(number: self.selectedDate.weekOfYear, year: self.selectedDate.year, base: self.user.userDetails!.base, isPaid: false, taskIds: self.user.userTasks.map{$0.id})
-                                    self.user.userWeeks[week.id] = week
-                                case .paid:
-                                    self.user.userWeeks[id]?.isPaid = true
+                        ZStack {
+                            GeometryReader() {geometry in
+                                HStack {
+                                    StatsView(date: self.selectedDate)
+        //                            DaySummary(date: self.selectedDate, completions: user.completions)
+        //
+        //
+        //                            WeekSummary(date: self.selectedDate,  weekComplete: self.user.weekEditable(for: self.selectedDate) )
+                                    
+                                   
+                                    LockButtonView(isLocked: false, action: {_ in })
+                                    PaidButtonView(isPaid: false, action: {_ in })
+                                   //     .frame(minWidth: 20, maxHeight: .infinity)
                                 }
-                            }
-                            .buttonStyle(WeekStatusButtonStyle())
-                            .disabled(true)
-
+                            }.border(Color.green)
                         }
+//                        HStack {
+//                            ButtonWeekView(week: user.userWeeks[for: selectedDate]) {newState in
+//                                let id = Week.weekId(for: self.selectedDate)
+//                                switch newState {
+//                                case .open:
+//                                    self.user.userWeeks[id] = nil
+//                                case .closed:
+//                                   let week = Week(number: self.selectedDate.weekOfYear, year: self.selectedDate.year, base: self.user.userDetails!.base, isPaid: false, taskIds: self.user.userTasks.map{$0.id})
+//                                    self.user.userWeeks[week.id] = week
+//                                case .paid:
+//                                    self.user.userWeeks[id]?.isPaid = true
+//                                }
+//                            }
+//                            .buttonStyle(WeekStatusButtonStyle())
+//                            .disabled(true)
+//
+//                        }
                         HStack {
                             Text("Tasks").font(.headline)
                         }
@@ -83,6 +91,9 @@ struct SummaryView: View {
                             
                             
                         }
+                        .frame(idealHeight: .infinity)
+                        .layoutPriority(1 )
+                        
                     }.padding(5)
                 }
                 .navigationBarTitle(Text(self.user.userDetails!.firstName), displayMode: .inline)
