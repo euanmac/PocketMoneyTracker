@@ -16,7 +16,8 @@ struct PaidButtonView: View {
     var body: some View {
         Button (action: {self.isPaid.toggle()}) {
             Image(systemName: imageName)
-            }
+                .frame(width: 18, height: 18)
+        }
         .buttonStyle(PaidButtonStyle())
     }
     

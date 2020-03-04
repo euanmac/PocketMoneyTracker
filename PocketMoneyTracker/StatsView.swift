@@ -49,7 +49,9 @@ struct StatsView: View {
                         Text("Week").font(.caption)
                     }
                     Spacer()
-                    Text(String(self.user.earnedForWeek(date: self.date).displayCurrency())).font(.body).lineLimit(0)    
+                    Text(String(self.user.earnedForWeek(date: self.date).displayCurrency()))
+                        .font(.title).lineLimit(0)
+                        .minimumScaleFactor(0.4)
                 }
             
                 .modifier(ShadowPanel())

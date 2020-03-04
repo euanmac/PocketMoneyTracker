@@ -19,12 +19,26 @@ extension Weeks {
         get {
             return self[Week.weekId(for: date)]
         }
-
+        set {
+            self[Week.weekId(for: date)] = newValue
+        }
     }
 }
 
-struct Week : Identifiable, Codable {
+extension Weeks {
+    
+    public func weekIsComplete(for date: Date) -> Bool {
+        self[for: date] != nil
+    }
 
+    public func weekIsPaid(for date: Date) -> Bool {
+       self[for: date]?.isPaid ?? false
+    }
+
+}
+
+
+struct Week : Identifiable, Codable {
     
     let number: Int
     let year: Int
@@ -60,8 +74,10 @@ struct Week : Identifiable, Codable {
         self.id = Int(String(self.year) + String(self.number))!
     }
     
-
-    
+    init (date: Date, base: Double, isPaid: Bool, taskIds: [UUID]) {
+        self.init(number: date.weekOfYear, year: date.year, base: base, isPaid: isPaid, taskIds: taskIds)
+    }
+        
     var startDate: Date {
         get {
             let dc = DateComponents(calendar: Calendar.current, weekOfYear: number, yearForWeekOfYear: self.year)

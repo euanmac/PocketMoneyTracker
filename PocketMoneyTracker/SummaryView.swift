@@ -15,109 +15,115 @@ struct SummaryView: View {
     @State var showNewTask: Bool = false
     
     var body: some View {
+         
+        GeometryReader() {outer in
         
-        print("Drawing  \(user.loadState)")
-        return ZStack {
-            
-            
-            Color(UIColor.green).edgesIgnoringSafeArea(.all)
-        
-            NavigationView {
-                
-                HStack(alignment: .top, spacing: nil) {
+            ZStack {
+                Color(UIColor.green).edgesIgnoringSafeArea(.all)
+                NavigationView {
                     
-                    VStack(alignment: .leading, spacing: 10) {
+                    HStack(alignment: .top, spacing: nil) {
                         
-                        Text(self.selectedDate.full)
-                            .font(.headline)
-                        
-                        DayPicker(selectedDate: self.$selectedDate)
-                        .modifier(ShadowPanel())
-                        
-                        ZStack {
-                            GeometryReader() {geometry in
-                                HStack {
-                                    StatsView(date: self.selectedDate)
-        //                            DaySummary(date: self.selectedDate, completions: user.completions)
-        //
-        //
-        //                            WeekSummary(date: self.selectedDate,  weekComplete: self.user.weekEditable(for: self.selectedDate) )
-                                    
-                                   
-                                    LockButtonView(isLocked: false, action: {_ in })
-                                    PaidButtonView(isPaid: false, action: {_ in })
-                                   //     .frame(minWidth: 20, maxHeight: .infinity)
-                                }
-                            }.border(Color.green)
-                        }
-//                        HStack {
-//                            ButtonWeekView(week: user.userWeeks[for: selectedDate]) {newState in
-//                                let id = Week.weekId(for: self.selectedDate)
-//                                switch newState {
-//                                case .open:
-//                                    self.user.userWeeks[id] = nil
-//                                case .closed:
-//                                   let week = Week(number: self.selectedDate.weekOfYear, year: self.selectedDate.year, base: self.user.userDetails!.base, isPaid: false, taskIds: self.user.userTasks.map{$0.id})
-//                                    self.user.userWeeks[week.id] = week
-//                                case .paid:
-//                                    self.user.userWeeks[id]?.isPaid = true
-//                                }
-//                            }
-//                            .buttonStyle(WeekStatusButtonStyle())
-//                            .disabled(true)
-//
-//                        }
-                        HStack {
-                            Text("Tasks").font(.headline)
-                        }
-                        .sheet(isPresented: $showNewTask) {
-                            AddTaskView(onAdd: {
-                                task in self.user.userTasks.append(task)})
-                        }
-                        
-                        ZStack(alignment: .bottom) {
+                        VStack(alignment: .leading, spacing: 10) {
                             
-                            TaskList(date: selectedDate)
-                                .modifier(ShadowPanel())
-                        
+                            Text(self.selectedDate.full)
+                                .font(.headline)
+                            
+                            DayPicker(selectedDate: self.$selectedDate)
+                            .modifier(ShadowPanel())
+                            
                             HStack {
-                                Spacer()
-                                Button("Add Task") {self.showNewTask = true}
-                                    .disabled(self.user.weekEditable(for: selectedDate))
+                                StatsView(date: self.selectedDate)
+                                
+                                //Complete week button
+                                ToggleButton(isOn: self.currentWeekComplete, onSystemImage: "lock.fill", offSystemImage: "lock.open.fill", action: self.completeWeek)
+                                    .disabled(self.currentWeekPaid)
+                                
+                                //Mark as paid
+                                ToggleButton(isOn: self.currentWeekPaid, onSystemImage: "checkmark.seal.fill", offSystemImage: "sterlingsign.square", action: self.markWeekAsPaid)
+                                    .disabled(!self.currentWeekComplete)
+                                            
                             }
-                            .padding(15)
-                            .background(Color(UIColor.systemBackground))
-                            .opacity(0.9)
-                            
-                            
-                        }
-                        .frame(idealHeight: .infinity)
-                        .layoutPriority(1 )
                         
-                    }.padding(5)
+                    
+                            HStack {
+                                Text("Tasks").font(.headline)
+                            }
+                            .sheet(isPresented: self.$showNewTask) {
+                                AddTaskView(onAdd: {
+                                    task in self.user.userTasks.append(task)})
+                            }
+                            
+                            ZStack(alignment: .bottom) {
+                                
+                                TaskList(date: self.selectedDate)
+                                    .modifier(ShadowPanel())
+                            
+                                HStack {
+                                    Spacer()
+                                    Button("Add Task") {self.showNewTask = true}
+                                        .disabled(self.user.weekEditable(for: self.selectedDate))
+                                }
+                                .padding(15)
+                                .background(Color(UIColor.systemBackground))
+                                .opacity(0.9)
+                                
+                                
+                            }
+                            
+                        }.padding(5)
+                    }
+                    .navigationBarTitle(Text(self.user.userDetails!.firstName), displayMode: .inline)
+                    .navigationBarItems(trailing: Button(action: {
+                        self.showEditUser = true
+                        }, label: {Image(systemName: "person.circle")}))
+                    .navigationBarHidden(false)
+                        .background(Color(UIColor.quaternarySystemFill))
+                   
                 }
-                .navigationBarTitle(Text(self.user.userDetails!.firstName), displayMode: .inline)
-                .navigationBarItems(trailing: Button(action: {
-                    self.showEditUser = true
-                    }, label: {Image(systemName: "person.circle")}))
-                .navigationBarHidden(false)
-                    .background(Color(UIColor.quaternarySystemFill))
-               
             }
-        }
 
-        .sheet(isPresented: $showEditUser) { EditUserView(editUser: self.user.userDetails!.editableUser, editable: true)
-            { newUser in
-                let userDetails = UserDetails(firstName: newUser.firstName, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
-                self.user.userDetails = userDetails
-                print(userDetails)
+            .sheet(isPresented: self.$showEditUser) { EditUserView(editUser: self.user.userDetails!.editableUser, editable: true)
+                { newUser in
+                    let userDetails = UserDetails(firstName: newUser.firstName, familyName: newUser.familyName, base: Double(newUser.base) ?? 0, email: newUser.email)
+                    self.user.userDetails = userDetails
+                    print(userDetails)
+                }
             }
         }
-        
+    }
+
+    private var currentWeekComplete: Bool {
+        user.userWeeks[for: selectedDate] != nil
+    }
+
+    private var currentWeekPaid: Bool {
+       user.userWeeks[for: selectedDate]?.isPaid ?? false
+    }
+
+    private func completeWeek(isComplete: Bool) {
+
+        if !isComplete {
+           //Clear out week
+           let id = Week.weekId(for: selectedDate)
+           self.user.userWeeks[id] = nil
+
+        } else {
+           //Add new week in
+           let week = Week(date: selectedDate, base: user.userDetails!.base, isPaid: false, taskIds: user.userTasks.map{$0.id})
+           user.userWeeks[week.id] = week
+        }
+    }
+    
+    private func markWeekAsPaid(isPaid: Bool) {
+        user.userWeeks[for: selectedDate]?.isPaid = isPaid
     }
     
     
 }
+    
+
+    
 
 
 struct SummaryView_Previews: PreviewProvider {
@@ -125,3 +131,4 @@ struct SummaryView_Previews: PreviewProvider {
         SummaryView()
     }
 }
+
