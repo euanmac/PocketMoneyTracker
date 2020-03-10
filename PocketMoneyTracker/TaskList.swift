@@ -14,15 +14,15 @@ struct TaskList: View {
     let date : Date
     var editTask: UserTask?
     
-    var disableTasks: Bool {
-        user.weekEditable(for: date)
+    var weekEditable: Bool {
+        user.userWeeks.weekIsComplete(for: date)
     }
     
     var body: some View {
         List {
             ForEach(user.tasks(for: date)) {task in
 
-                TaskRow(task: task, date: self.date, disabled: false)
+                TaskRow(task: task, date: self.date, disabled: self.weekEditable)
                     
             }
         }

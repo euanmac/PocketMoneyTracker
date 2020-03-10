@@ -47,20 +47,6 @@ struct Week : Identifiable, Codable {
     var isPaid: Bool
     let taskIds: [UUID]
 
-//    enum CodingKeys: String, CodingKey {
-//        case number, year, base, id, isComplete
-//    }
-//    
-//    init(from decoder: Decoder) throws {
-//        let values = try decoder.container(keyedBy: CodingKeys.self)
-//        number = try values.decode(Int.self, forKey: .number)
-//        year = try values.decode(Int.self, forKey: .year)
-//        id  = try values.decode(Int.self, forKey: .base)
-//        base  = try values.decode(Double.self, forKey: .base)
-//        isComplete = try values.decode(Bool.self, forKey: .isComplete)
-//
-//    }
-//
     static func weekId(for date: Date) -> Int {
         return Int(String(date.year) + String(date.weekOfYear))!
     }
@@ -102,19 +88,5 @@ extension Week : CustomStringConvertible {
     }
 }
 
-//struct Weeks: Codable {
-//    private var weeks = [Int: Week]()
-//
-//    subscript (id: Int) -> Week? {
-//        get {
-//            return weeks[id]
-//        }
-//        set(newValue) {
-//            if let newValue = newValue {
-//                weeks[newValue.id] = newValue
-//            }
-//        }
-//    }
-//}
 
 

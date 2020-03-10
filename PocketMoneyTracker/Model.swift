@@ -161,10 +161,10 @@ class User : ObservableObject {
         return (completions.filterBy(taskId: taskId).count > 0)
     }
     
-    //Checks whether there is a week completed for current date
-    func weekEditable(for date: Date) -> Bool {
-        return userWeeks[for: date] != nil
-    }
+//    //Checks whether there is a week completed for current date
+//    func weekEditable(for date: Date) -> Bool {
+//        return userWeeks[for: date] != nil
+//    }
     
     func earnedForWeek(date: Date) -> Double{
         guard let userDetails = self.userDetails else {

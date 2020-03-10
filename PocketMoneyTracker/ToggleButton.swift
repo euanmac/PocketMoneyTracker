@@ -9,23 +9,21 @@
 import SwiftUI
 
 struct ToggleButton: View {
-    @State var isOn: Bool
+    @Binding var isOn: Bool
     let onSystemImage: String
     let offSystemImage: String
-    let action: (Bool) -> Void
     private(set) var disabled = false
     
     var body: some View {
         //GeometryReader() {geo in
             Button (action: {
                 self.isOn.toggle()
-                self.action(self.isOn)
             }) {
                 Image(systemName: self.imageName)
                     .frame(width: 18, height: 18)
                 }.disabled(disabled)
          //   }
-                .buttonStyle(ToggleButtonStyle(disabled: disabled))
+                .buttonStyle(DarkButtonStyle(disabled: disabled))
     }
     
     
@@ -41,7 +39,7 @@ struct ToggleButton: View {
     }
 }
 
-struct ToggleButtonStyle: ButtonStyle {
+struct DarkButtonStyle: ButtonStyle {
     let disabled: Bool
     
     func makeBody(configuration: Self.Configuration) -> some View {
@@ -51,12 +49,30 @@ struct ToggleButtonStyle: ButtonStyle {
             .background(disabled ? Color.gray : Color.black)
             .foregroundColor(.white)
             .cornerRadius(10)
+            .shadow(radius: configuration.isPressed ? 0 : 4.0)
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+        
+    }
+}
+
+struct LightButtonStyle: ButtonStyle {
+    let disabled: Bool
+    
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            //.frame(minWidth: 0, maxWidth: .infinity)
+            //.padding(2)
+            //.background(Color.primary.colorInvert())
+            .foregroundColor(disabled ? Color.gray : Color.black)
+            //.cornerRadius(10)
+            //.shadow(radius: configuration.isPressed ? 0 : 2.0)
+            .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
+        
     }
 }
 
 struct ToggleButton_Previews: PreviewProvider {
     static var previews: some View {
-        ToggleButton(isOn: true, onSystemImage: "lock.fill", offSystemImage: "lock.open.fill", action: {print($0)})
+        ToggleButton(isOn: .constant(true), onSystemImage: "lock.fill", offSystemImage: "lock.open.fill")
     }
 }

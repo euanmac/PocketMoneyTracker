@@ -15,43 +15,40 @@ struct DayPicker: View {
         
             VStack(alignment: .leading, spacing: 5)  {
                                 
-                HStack() {
-                    Image(systemName: "arrowtriangle.left.circle.fill")
-                        .font(.title)
-                        //.shadow(radius: 5)
-                        .onTapGesture {
-                            self.selectedDate = Calendar.current.date(byAdding: .day, value: -7, to: self.selectedDate)!
-
+                HStack {
+                    
+                    Button(action: {self.selectedDate = Calendar.current.date(byAdding: .day, value: -7, to: self.selectedDate)!}) {
+                        Image(systemName: "arrowtriangle.left.circle.fill")
+                            .font(.title)
                     }
+                    .buttonStyle(LightButtonStyle(disabled: false))
                     
                     
-                        ForEach(self.selectedDate.weekOfDates, id: \.self) { weekDate in
-                            
-                            VStack(alignment: .center, spacing:10) {
-                                
-                                Text(weekDate.dayInitial).font(.caption)
-                                Text(weekDate.day)
-                                    .modifier(TextDay(selected: weekDate.dateEqual(to: self.selectedDate)))
-                                    .animation(.interactiveSpring())
-                                    .onTapGesture {
-                                        self.selectedDate = weekDate
-                                        //self.dateChanged(weekDate)
-                                }.frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
-                               
-                            }
-                        }
+                    ForEach(self.selectedDate.weekOfDates, id: \.self) { weekDate in
                         
-                    
-                    
-                    Image(systemName: "arrowtriangle.right.circle.fill")
-                        .font(.title)
-                        //.shadow(radius: 5)
-                        .onTapGesture {
-                            self.selectedDate = Calendar.current.date(byAdding: .day, value: 7, to: self.selectedDate)!
+                        VStack(alignment: .center, spacing:10) {
+                            
+                            Text(weekDate.dayInitial).font(.caption)
+                            Text(weekDate.day)
+                                .modifier(TextDay(selected: weekDate.dateEqual(to: self.selectedDate)))
+                                .animation(.interactiveSpring())
+                                .onTapGesture {
+                                    self.selectedDate = weekDate
+                                    //self.dateChanged(weekDate)
+                            }.frame(minWidth: 0, idealWidth: nil, maxWidth: .infinity, minHeight: 0, idealHeight: nil, maxHeight: nil)
+                           
                         }
-                   
-                }
+                    }
+                            
+                    
+                    Button(action: {self.selectedDate = Calendar.current.date(byAdding: .day, value: 7, to: self.selectedDate)!}) {
+                                           Image(systemName: "arrowtriangle.right.circle.fill")
+                                               .font(.title)
+                    }
+                        .buttonStyle(LightButtonStyle(disabled: false))
+                    
             }
+        }
                 
     }
 }

@@ -55,23 +55,26 @@ struct TaskRow: View {
                 
                 HStack {
                     
-                    if !disabled {
+                    //if !disabled {
+                    Button(action: {
+                        self.user.completions.removeLast(taskId: self.task.id, date: self.date)
+                    })
+                    {
                         Image(systemName: "xmark.circle")
-                            .onTapGesture {
-                                self.user.completions.removeLast(taskId: self.task.id, date: self.date)
-                        }
                     }
-                       
+                    .buttonStyle(LightButtonStyle(disabled: disabled))
+                    .disabled(disabled)
                     
                     Text(String(self.user.completions.filterBy(taskId: task.id, date: self.date).count))
-                   
-                    if !disabled {
-                        Image(systemName: "checkmark.circle")
-                            .onTapGesture {
-                               let completion = TaskCompletion(on: self.date, taskId: self.task.id)
-                               self.user.completions.append(completion: completion)
-                            }
+                    Button(action: {
+                        let completion = TaskCompletion(on: self.date, taskId: self.task.id)
+                        self.user.completions.append(completion: completion)
+                    })
+                    {
+                       Image(systemName: "checkmark.circle")
                     }
+                    .buttonStyle(LightButtonStyle(disabled: disabled))
+                    .disabled(disabled)
 
                 }
                 

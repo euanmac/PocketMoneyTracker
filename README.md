@@ -13,3 +13,8 @@ User
     -Week
         -TaskId
 
+
+Task deletable if no completions ever
+Task archivable if no completions for current week
+
+
