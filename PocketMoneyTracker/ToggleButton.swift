@@ -15,27 +15,24 @@ struct ToggleButton: View {
     private(set) var disabled = false
     
     var body: some View {
-        //GeometryReader() {geo in
-            Button (action: {
-                self.isOn.toggle()
-            }) {
-                Image(systemName: self.imageName)
-                    .frame(width: 18, height: 18)
-                }.disabled(disabled)
-         //   }
-                .buttonStyle(DarkButtonStyle(disabled: disabled))
+        
+        Button (action: {self.isOn.toggle()}) {
+            Image(systemName: self.imageName)
+                .frame(width: 18, height: 18)
+        }
+            .disabled(disabled)
+            .buttonStyle(DarkButtonStyle(disabled: disabled))
     }
     
-    
-    var imageName: String {
+    private var imageName: String {
         isOn ? onSystemImage : offSystemImage
     }
     
     func disabled(_ disabled: Bool) -> some View
     {
-        var v = self
-        v.disabled = disabled
-        return v
+        var newSelf = self
+        newSelf.disabled = disabled
+        return newSelf
     }
 }
 

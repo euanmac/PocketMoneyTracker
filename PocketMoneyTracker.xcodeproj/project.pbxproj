@@ -13,8 +13,6 @@
 		BE3E443B2385EF960033B2F5 /* DaySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3E443A2385EF960033B2F5 /* DaySummary.swift */; };
 		BE5C61F623D62325003B010B /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5C61F523D62324003B010B /* AddTaskView.swift */; };
 		BE73EBAD23FB0E7F0085BC27 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */; };
-		BE73EBAF23FC5CD80085BC27 /* WeekButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73EBAE23FC5CD80085BC27 /* WeekButtonView.swift */; };
-		BE76630E2401DBD00006DDF6 /* PaidButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE76630D2401DBD00006DDF6 /* PaidButtonView.swift */; };
 		BE7EC890239834F600FBCBC1 /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7EC88F239834F600FBCBC1 /* TaskList.swift */; };
 		BE8D17452338A3DE0005A73B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D17442338A3DE0005A73B /* AppDelegate.swift */; };
 		BE8D17472338A3DE0005A73B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8D17462338A3DE0005A73B /* SceneDelegate.swift */; };
@@ -54,8 +52,6 @@
 		BE3E443A2385EF960033B2F5 /* DaySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaySummary.swift; sourceTree = "<group>"; };
 		BE5C61F523D62324003B010B /* AddTaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 		BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
-		BE73EBAE23FC5CD80085BC27 /* WeekButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekButtonView.swift; sourceTree = "<group>"; };
-		BE76630D2401DBD00006DDF6 /* PaidButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaidButtonView.swift; sourceTree = "<group>"; };
 		BE780FA423A3740A0071CAB2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		BE7EC88F239834F600FBCBC1 /* TaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskList.swift; sourceTree = "<group>"; };
 		BE8D17412338A3DE0005A73B /* PocketMoneyTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PocketMoneyTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,12 +131,10 @@
 				BEB3121F2370DE760031F857 /* LoadingView.swift */,
 				BEB31223237159590031F857 /* SummaryView.swift */,
 				BE1D6AE523FF40EE001F56F7 /* ToggleButton.swift */,
-				BE76630D2401DBD00006DDF6 /* PaidButtonView.swift */,
 				BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */,
 				BE9D0216234DB77C001070BC /* WeekSummary.swift */,
 				BE3E443A2385EF960033B2F5 /* DaySummary.swift */,
 				BE987143234BADEB0037CFBD /* DayPicker.swift */,
-				BE73EBAE23FC5CD80085BC27 /* WeekButtonView.swift */,
 				BE9D2CB7237D37A70049987C /* ViewStyles.swift */,
 				BE7EC88F239834F600FBCBC1 /* TaskList.swift */,
 				BE9D0218234DB8E5001070BC /* TaskRow.swift */,
@@ -277,12 +271,10 @@
 				BE987144234BADEB0037CFBD /* DayPicker.swift in Sources */,
 				BEB312222370E1380031F857 /* AddUserView.swift in Sources */,
 				BE3E443B2385EF960033B2F5 /* DaySummary.swift in Sources */,
-				BE76630E2401DBD00006DDF6 /* PaidButtonView.swift in Sources */,
 				BE8D17452338A3DE0005A73B /* AppDelegate.swift in Sources */,
 				BE73EBAD23FB0E7F0085BC27 /* StatsView.swift in Sources */,
 				BE31DB84237E91D40055F257 /* Completions.swift in Sources */,
 				BE3E4439238468930033B2F5 /* Week.swift in Sources */,
-				BE73EBAF23FC5CD80085BC27 /* WeekButtonView.swift in Sources */,
 				BE8D17472338A3DE0005A73B /* SceneDelegate.swift in Sources */,
 				BEB312202370DE760031F857 /* LoadingView.swift in Sources */,
 				BE9D0219234DB8E5001070BC /* TaskRow.swift in Sources */,
