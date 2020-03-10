@@ -11,6 +11,7 @@
 		BE31DB84237E91D40055F257 /* Completions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE31DB83237E91D40055F257 /* Completions.swift */; };
 		BE3E4439238468930033B2F5 /* Week.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3E4438238468930033B2F5 /* Week.swift */; };
 		BE3E443B2385EF960033B2F5 /* DaySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3E443A2385EF960033B2F5 /* DaySummary.swift */; };
+		BE4107D124180EE90022A806 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4107D024180EE90022A806 /* Extension.swift */; };
 		BE5C61F623D62325003B010B /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5C61F523D62324003B010B /* AddTaskView.swift */; };
 		BE73EBAD23FB0E7F0085BC27 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */; };
 		BE7EC890239834F600FBCBC1 /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7EC88F239834F600FBCBC1 /* TaskList.swift */; };
@@ -50,6 +51,7 @@
 		BE31DB83237E91D40055F257 /* Completions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completions.swift; sourceTree = "<group>"; };
 		BE3E4438238468930033B2F5 /* Week.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Week.swift; sourceTree = "<group>"; };
 		BE3E443A2385EF960033B2F5 /* DaySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaySummary.swift; sourceTree = "<group>"; };
+		BE4107D024180EE90022A806 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		BE5C61F523D62324003B010B /* AddTaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 		BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		BE780FA423A3740A0071CAB2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -97,6 +99,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE4107D224180F1E0022A806 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BE5C61F523D62324003B010B /* AddTaskView.swift */,
+				BEB312212370E1380031F857 /* AddUserView.swift */,
+				BE8D17482338A3DE0005A73B /* ContentView.swift */,
+				BE3E443A2385EF960033B2F5 /* DaySummary.swift */,
+				BE987143234BADEB0037CFBD /* DayPicker.swift */,
+				BEE1B47C23602E6E0063D04E /* EditUserView.swift */,
+				BE9D2CB5237A190D0049987C /* EditTaskView.swift */,
+				BEB3121F2370DE760031F857 /* LoadingView.swift */,
+				BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */,
+				BEB31223237159590031F857 /* SummaryView.swift */,
+				BE9D0218234DB8E5001070BC /* TaskRow.swift */,
+				BE7EC88F239834F600FBCBC1 /* TaskList.swift */,
+				BE1D6AE523FF40EE001F56F7 /* ToggleButton.swift */,
+				BE9D2CB7237D37A70049987C /* ViewStyles.swift */,
+				BE9D0216234DB77C001070BC /* WeekSummary.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BE4107D324180F2B0022A806 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BE31DB83237E91D40055F257 /* Completions.swift */,
+				BEDE9A622350EEFC002B82B1 /* DataManagers.swift */,
+				BE8D17662338A4510005A73B /* Model.swift */,
+				BEB78D8F2387C59900EC2DC7 /* UserTask.swift */,
+				BE3E4438238468930033B2F5 /* Week.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		BE8D17382338A3DE0005A73B = {
 			isa = PBXGroup;
 			children = (
@@ -119,28 +155,11 @@
 		BE8D17432338A3DE0005A73B /* PocketMoneyTracker */ = {
 			isa = PBXGroup;
 			children = (
+				BE4107D324180F2B0022A806 /* Model */,
+				BE4107D224180F1E0022A806 /* View */,
 				BE8D17442338A3DE0005A73B /* AppDelegate.swift */,
 				BE8D17462338A3DE0005A73B /* SceneDelegate.swift */,
-				BE8D17662338A4510005A73B /* Model.swift */,
-				BEB78D8F2387C59900EC2DC7 /* UserTask.swift */,
-				BE3E4438238468930033B2F5 /* Week.swift */,
-				BE31DB83237E91D40055F257 /* Completions.swift */,
-				BEDE9A622350EEFC002B82B1 /* DataManagers.swift */,
-				BE8D17482338A3DE0005A73B /* ContentView.swift */,
-				BEB312212370E1380031F857 /* AddUserView.swift */,
-				BEB3121F2370DE760031F857 /* LoadingView.swift */,
-				BEB31223237159590031F857 /* SummaryView.swift */,
-				BE1D6AE523FF40EE001F56F7 /* ToggleButton.swift */,
-				BE73EBAC23FB0E7F0085BC27 /* StatsView.swift */,
-				BE9D0216234DB77C001070BC /* WeekSummary.swift */,
-				BE3E443A2385EF960033B2F5 /* DaySummary.swift */,
-				BE987143234BADEB0037CFBD /* DayPicker.swift */,
-				BE9D2CB7237D37A70049987C /* ViewStyles.swift */,
-				BE7EC88F239834F600FBCBC1 /* TaskList.swift */,
-				BE9D0218234DB8E5001070BC /* TaskRow.swift */,
-				BEE1B47C23602E6E0063D04E /* EditUserView.swift */,
-				BE9D2CB5237A190D0049987C /* EditTaskView.swift */,
-				BE5C61F523D62324003B010B /* AddTaskView.swift */,
+				BE4107D024180EE90022A806 /* Extension.swift */,
 				BE8D174A2338A3E90005A73B /* Assets.xcassets */,
 				BE8D174F2338A3E90005A73B /* LaunchScreen.storyboard */,
 				BE8D17522338A3E90005A73B /* Info.plist */,
@@ -267,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE4107D124180EE90022A806 /* Extension.swift in Sources */,
 				BE7EC890239834F600FBCBC1 /* TaskList.swift in Sources */,
 				BE987144234BADEB0037CFBD /* DayPicker.swift in Sources */,
 				BEB312222370E1380031F857 /* AddUserView.swift in Sources */,
