@@ -156,9 +156,15 @@ class User : ObservableObject {
         
     }
     
+    //Delete a task and associated completions
+    func deleteTask(taskId: UUID)  {
+        completions.remove(taskId: taskId)
+        userTasks.removeAll {$0.id == taskId}
+    }
+    
     //Determines whether a task can be deleted. If no completions then it can
     func taskDeletable(taskId: UUID) -> Bool {
-        return (completions.filterBy(taskId: taskId).count > 0)
+        return (completions.filterBy(taskId: taskId).count == 0)
     }
     
 //    //Checks whether there is a week completed for current date

@@ -86,11 +86,11 @@ struct TaskRow: View {
         }
         .background(Color(UIColor.systemBackground))
         .sheet(isPresented: self.$showEditTask) {
-            EditTaskView(editTask: self.task, editable: true, archivable: self.canArchive,
+            EditTaskView(editTask: self.task, editable: true, deletable: self.canDeleteTask, archivable: self.canArchiveTask,
                             onSave: { saveTask in
                                 self.user.userTasks[saveTask.id] = saveTask
                             }, onDelete: { deleteTask in
-                                print(deleteTask)
+                                self.user.deleteTask(taskId: deleteTask.id)
                             })
         }
         .onTapGesture {
@@ -99,13 +99,19 @@ struct TaskRow: View {
         
     }
     
-    var canArchive: Bool {
+    var canArchiveTask: Bool {
         user.completions.filterBy(weekOfYear: date.weekOfYear).filter({$0.id == self.task.id}).count == 0
+    }
+    
+    var canDeleteTask: Bool {
+        user.taskDeletable(taskId: task.id)
     }
     
     var taskCompleteForWeek: Bool {
         self.user.completions.filterBy(taskId: task.id, weekOfYear: self.date.weekOfYear).count > 0
     }
+    
+    
 }
 
 

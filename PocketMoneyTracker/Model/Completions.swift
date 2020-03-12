@@ -53,6 +53,14 @@ struct Completions: Codable {
         }
     }
     
+    mutating func remove(taskId: UUID) {
+        completions.removeAll {$0.taskId == taskId}
+    }
+    
+    mutating func remove(completionId: UUID) {
+        completions.removeAll {$0.id == completionId}
+    }
+    
     mutating func removeLast(taskId: UUID, date: Date) {
         let dateOnly = Calendar.current.dateComponents([.day, .year, .month], from: date)
         if let id = completions.lastIndex(where: { $0.taskId == taskId && Calendar.current.dateComponents([.day, .year, .month], from: $0.date) == dateOnly }) {

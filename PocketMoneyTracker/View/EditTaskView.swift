@@ -16,6 +16,7 @@ struct EditTaskView: View {
     @Environment(\.presentationMode) var presentationMode
     @State var editTask: UserTask
     let editable: Bool
+    let deletable: Bool
     let archivable: Bool
     let onSave: (UserTask)->Void
     let onDelete: ((UserTask)->Void)?
@@ -53,7 +54,7 @@ struct EditTaskView: View {
                             .disabled(!editable)
                             
                             //These fields should always be disabled as a task's value / mandatory state cannot change after creation
-                            //To remove a task it should be archived instead
+                            //To remove a task it should be archived instead unless it has no completions
                             if (editTask.mandatory) {
                                 Toggle("Mandatory", isOn: .constant(true)).disabled(true)
                             } else {
@@ -62,10 +63,25 @@ struct EditTaskView: View {
                                     Spacer()
                                     Text(editTask.value.displayCurrency()).disabled(true)
                                 }                    }
+                                                                            
+                            //If deletable then show delete button
+                             if (deletable) {
+                                HStack()  {
+                                    Spacer()
+                                    Button(action: {
+                                        self.onDelete!(self.editTask)
+                                        self.presentationMode.wrappedValue.dismiss()
+                                    }) {
+                                        Text("Delete Task")
+                                    }
+                                        .buttonStyle(BorderlessButtonStyle())
+                                        .frame(minWidth: nil, idealWidth: nil, maxWidth: nil, minHeight: nil, idealHeight: nil, maxHeight: nil, alignment: .center)
+                                   Spacer()
+                                }
+                            }
                             
-                            //Can archive a task only if no completions for that week
-                            Toggle(isOn: $editTask.archived, label: {Text("Archived")}).disabled(!archivable)
-
+                            
+                            
                         }
                         .navigationBarHidden(true)
                         .navigationBarTitle("")
